@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
         if (result1 <= LIMIT)
         {
             total1++;
-            std::cout << "Case 1 triggered with " << result0 << " cycles. Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
+            std::cout << "Case 1 triggered with " << result1 << " cycles. Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
         }
     }
 
