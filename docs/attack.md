@@ -9,7 +9,7 @@ in the first iteration of the hash to curve algorithm succeeded or not.
 * The implementation of the
 hash to curve algorithm for ECC groups does include mitigations
 against side channel attacks. Those mitigations include performing extra dummy iterations on random data
-* Code runs on **a user connecting the network**.
+* Code runs on **The router**
 * Can be run from unprivileged user-mode process.
 * Attacking hostapd's ([git](git://w1.fi/hostap.git) , commit `0eb34f8f2`), function `sae_derive_pwe_ecc` (see last section)
 * The attack is Flush-Reload.
