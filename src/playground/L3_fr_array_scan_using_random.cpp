@@ -1,8 +1,8 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
 #include "../main/utils/cacheutils.h"
 #include "../main/utils/intel.h"
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 #include <unistd.h>
 
 const size_t INNER_ITERATIONS = 64 * 11; // need 2 * nlogn, and n = 64;
@@ -13,9 +13,9 @@ uint64_t secret_array[LENGTH];
 /**
  * Copied code from stackoverflow, does whatever you think it does.
  */
-void print_bits(size_t const size, void const *const ptr)
+void print_bits(size_t const size, void const* const ptr)
 {
-    unsigned char *b = (unsigned char *)ptr;
+    unsigned char* b = (unsigned char*)ptr;
     unsigned char byte;
     int i, j;
 
@@ -54,7 +54,7 @@ void parent_process(uint64_t array[])
             {
                 flush(&array[i * 8]);
             }
-            // wait 
+            // wait
             usleep(15 * 100);
             // check if random element has returned
             int r = rand() % 64;
@@ -65,7 +65,7 @@ void parent_process(uint64_t array[])
     }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     srand(static_cast<unsigned int>(time(0)));
 
