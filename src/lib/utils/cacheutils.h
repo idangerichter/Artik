@@ -1,12 +1,10 @@
 #ifndef CACHEUTILS_H
 #define CACHEUTILS_H
 
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-
-long probe_timing(void* adrs)
+template<typename T>
+int64_t probe_timing(T* adrs)
 {
-    volatile long time;
+    volatile int64_t time;
 
     asm __volatile__("    mfence             \n"
                      "    lfence             \n"
@@ -24,9 +22,9 @@ long probe_timing(void* adrs)
     return time;
 }
 
-unsigned long long rdtsc()
+int64_t rdtsc()
 {
-    unsigned long long a, d;
+    int64_t a, d;
     asm volatile("mfence");
     asm volatile("rdtsc" : "=a"(a), "=d"(d));
     a = (d << 32) | a;
