@@ -1,9 +1,9 @@
 #pragma once
-#include <iostream>
+#include <cstdint>
 
 int64_t rdtsc()
 {
-    volatile int64_t a, d;
+    int64_t a, d;
     asm volatile("mfence");
     asm volatile("rdtsc" : "=a"(a), "=d"(d));
     a = (d << 32) | a;
