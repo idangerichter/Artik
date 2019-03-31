@@ -1,6 +1,6 @@
-#include <iostream>
 #include "../main/utils/cacheutils.h"
 #include "../main/utils/intel.h"
+#include <iostream>
 
 const size_t ITERATIONS = 100;
 const size_t LENGTH = L3_CACHE_SIZE / sizeof(uint64_t);
