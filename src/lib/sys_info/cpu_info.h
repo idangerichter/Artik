@@ -1,7 +1,7 @@
 #pragma once
 #include <cstdint>
 
-struct cpu_info
+struct CpuInfo
 {
   #pragma region L1
   size_t L1_data_cache_size;
