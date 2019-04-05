@@ -1,5 +1,5 @@
-#include "../main/utils/cacheutils.h"
-#include "../main/utils/intel.h"
+#include "../lib/low_level/cache_intrinsics.h"
+#include "intel.h"
 #include <iostream>
 
 const size_t ITERATIONS = 100;

@@ -1,5 +1,5 @@
-#include "../main/utils/cacheutils.h"
-#include "../main/utils/intel.h"
+#include "../lib/low_level/cache_intrinsics.h"
+#include "intel.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
