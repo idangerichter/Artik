@@ -1,24 +1,13 @@
-#include "../lib/low_level/cache_intrinsics.h"
-#include "intel.h"
+#include "../lib/utils/Board.hpp"
 #include <cstdlib>
 #include <fcntl.h>
 #include <iostream>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 
-const size_t LIMIT = 100;
-
-char* get_file(char* path)
-{
-    uint offset = 0;
-    int fd = open(path, O_RDONLY);
-
-    if (fd < 3) return nullptr;
-    char* addr = (char*)mmap(0, 64 * 1024 * 1024, PROT_READ, MAP_SHARED, fd, 0);
-    if (addr == (void*)-1) return nullptr;
-    return addr;
-}
+const size_t LIMIT = 120;
 
 int main(int argc, char* argv[])
 {
@@ -28,7 +17,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    char* path = argv[1];
+    std::string path(argv[1]);
     int addr0 = std::strtol(argv[2], nullptr, 16);
     int addr1 = std::strtol(argv[3], nullptr, 16);
 
@@ -37,18 +26,23 @@ int main(int argc, char* argv[])
         std::cout << "Usage: branch_detector file addr0 addr1" << std::endl;
         return 1;
     }
-
-    char* base_addr = get_file(argv[1]);
+    std::cout << "Detecting between: " << addr0 << " and " << addr1 << std::endl;
+    Board board(path);
 
     uint total0 = 0;
     uint total1 = 0;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
     while (true)
     {
-        flush(base_addr + addr1);
-        int result1 = probe_timing(base_addr + addr1);
-        flush(base_addr + addr0);
-        int result0 = probe_timing(base_addr + addr0);
-
+        board.Flush(addr0);
+        usleep(50);
+        int32_t result0 = board.Measure(addr0);
+        usleep(50);
+        board.Flush(addr1);
+        usleep(50);
+        int32_t result1 = board.Measure(addr1);
         if (result0 <= LIMIT)
         {
             total0++;
@@ -62,6 +56,5 @@ int main(int argc, char* argv[])
                       << " 1s: " << total1 << std::endl;
         }
     }
-
-    return 0;
+#pragma clang diagnostic pop
 }

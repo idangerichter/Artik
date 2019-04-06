@@ -1,9 +1,8 @@
-#pragma once
-#include <cstdint>
+#include "cache_intrinsics.hpp"
 
-int64_t rdtsc()
+uint64_t rdtsc()
 {
-    int64_t a, d;
+    unsigned long long a, d;
     asm volatile("mfence");
     asm volatile("rdtsc" : "=a"(a), "=d"(d));
     a = (d << 32) | a;
@@ -11,10 +10,19 @@ int64_t rdtsc()
     return a;
 }
 
-template<typename T>
-int64_t probe_timing(T* adrs)
+void MemoryAccess(void* p)
 {
-    volatile int64_t time;
+    asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax");
+}
+
+void MemoryFlush(void* p)
+{
+    asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax");
+}
+
+int64_t ProbeTiming(void* p)
+{
+    volatile long time;
 
     asm __volatile__("    mfence             \n"
                      "    lfence             \n"
@@ -25,20 +33,8 @@ int64_t probe_timing(T* adrs)
                      "    lfence             \n"
                      "    rdtsc              \n"
                      "    subl %%esi, %%eax  \n"
-                     // "    clflush 0(%1)      \n"
-                     : "=a"(time)
-                     : "c"(adrs)
-                     : "%esi", "%edx");
+    : "=a"(time)
+    : "c"(p)
+    : "%esi", "%edx");
     return time;
-}
-template<typename T>
-void maccess(T* p)
-{
-    asm volatile("movq (%0), %%rax\n" : : "c"(p) : "rax");
-}
-
-template<typename T>
-void flush(T* p)
-{
-    asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax");
 }

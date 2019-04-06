@@ -1,13 +1,14 @@
-#include "../lib/low_level/cache_intrinsics.h"
+#include "../lib/low_level/cache_intrinsics.hpp"
+#include "../lib/utils/Board.hpp"
 #include "intel.h"
 #include <iostream>
 
 const size_t ITERATIONS = 100;
 const size_t LENGTH = L3_CACHE_SIZE / sizeof(uint64_t);
-uint64_t secret_array[LENGTH];
 
-int main(void)
+int main()
 {
+    Board secret_array(LENGTH);
     long sum_good = 0;
     long sum_bad = 0;
     for (size_t x = 0; x < ITERATIONS; x++)
@@ -15,15 +16,15 @@ int main(void)
         // flush array from L3
         for (size_t i = 0; i < LENGTH; i++)
         {
-            flush(&secret_array[i]);
+            secret_array.Flush(i);
         }
 
         // secret access
         secret_array[9] = x;
 
         // try cache attack
-        sum_good += probe_timing(&secret_array[9]);
-        sum_bad += probe_timing(&secret_array[32]);
+        sum_good += secret_array.Measure(9);
+        sum_bad += secret_array.Measure(47);
     }
 
     std::cout << "Expected: good < bad" << std::endl;
