@@ -14,7 +14,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # Library module
 file(GLOB_RECURSE lib_sources src/lib/*.*)
-add_library(Lib ${lib_sources} src/lib/timing_agents/timing_agent.hpp src/lib/timing_agents/sleep_timing_agent.hpp src/lib/timing_agents/sleep_timing_agent.cpp)
+add_library(Lib ${lib_sources} src/lib/timing_agents/timing_agent.hpp src/lib/timing_agents/sleep_timing_agent.hpp src/lib/timing_agents/sleep_timing_agent.cpp src/lib/calibration/calibration.hpp src/lib/calibration/gaussian_mixture_analysis.hpp)
 #target_compile_options(Lib PRIVATE -masm=intel)
 
 # Playground
