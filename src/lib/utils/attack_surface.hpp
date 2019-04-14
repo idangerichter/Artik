@@ -1,41 +1,41 @@
 #pragma once
 #include <string>
 
-enum class BoardType
+enum class SurfaceType
 {
     MAPPED_MEMORY,
     ALLOCATED,
     PRE_ALLOCATED
 };
 
-class Board
+class AttackSurface
 {
     public:
     /**
-     * Initiate a board from a file.
-     * Loads the board from file, using mmap.
+     * Initiate an attack surface from a file.
+     * Loads the array from file, using mmap.
      * @param filename A valid filename
      * @param offset The offset from the beginning of the file to load from. Default: 0
      * @param size How many bytes to read. Default: 0 - all.
      */
-    Board(const std::string& filename, std::size_t offset = 0, std::size_t size = 0);
+    explicit AttackSurface(const std::string& filename, std::size_t offset = 0, std::size_t size = 0);
     /**
-     * Initiate a board using an allocated array with the given size
+     * Initiate an attack surface using an allocated array with the given size
      * @param size The size of the array
      */
-    Board(std::size_t size);
+    explicit AttackSurface(std::size_t size);
 
     /**
-     * Create a board from already allocated array.
+     * Create an attack surface from already allocated array.
      * Note: The array will not be freed
      * @param array the array
      * @param size The size of the array
      */
-    Board(void *array, std::size_t size);
+    AttackSurface(void* array, std::size_t size);
     /**
      * Free all used memory
      */
-    ~Board();
+    ~AttackSurface();
 
     int8_t& operator[](std::size_t index);
     const int8_t& operator[](std::size_t index) const;
@@ -68,12 +68,11 @@ class Board
     void LoadToCache() const;
 
     /**
-     * The type of the board
+     * The type of the surface
      */
-    const BoardType boardType;
-    const std::size_t size;
+    const SurfaceType surface_type;
+    std::size_t size;
 
     private:
-    int8_t* const array;
-    Board(int fd, std::size_t offset, std::size_t real_size);
+    int8_t* array;
 };

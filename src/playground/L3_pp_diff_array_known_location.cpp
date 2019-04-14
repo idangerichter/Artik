@@ -1,5 +1,5 @@
 #include "../lib/low_level/cache_intrinsics.hpp"
-#include "../lib/utils/Board.hpp"
+#include "../lib/utils/attack_surface.hpp"
 #include "intel.h"
 #include <iostream>
 
@@ -12,7 +12,7 @@ uint64_t secret_array[LENGTH];
 
 int main()
 {
-    Board board(LENGTH);
+    AttackSurface board(LENGTH);
     long sum_good = 0;
     long sum_bad = 0;
     for (size_t x = 0; x < ITERATIONS; x++)

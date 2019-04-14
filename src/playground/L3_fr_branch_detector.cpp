@@ -1,4 +1,4 @@
-#include "../lib/utils/Board.hpp"
+#include "../lib/utils/attack_surface.hpp"
 #include <cstdlib>
 #include <fcntl.h>
 #include <iostream>
@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         return 1;
     }
     std::cout << "Detecting between: " << addr0 << " and " << addr1 << std::endl;
-    Board board(path);
+    AttackSurface board(path);
 
     uint total0 = 0;
     uint total1 = 0;

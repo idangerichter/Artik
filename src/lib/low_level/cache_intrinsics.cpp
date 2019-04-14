@@ -1,5 +1,7 @@
 #include "cache_intrinsics.hpp"
 
+namespace Memory
+{
 uint64_t rdtsc()
 {
     unsigned long long a, d;
@@ -33,8 +35,9 @@ int64_t ProbeTiming(void* p)
                      "    lfence             \n"
                      "    rdtsc              \n"
                      "    subl %%esi, %%eax  \n"
-    : "=a"(time)
-    : "c"(p)
-    : "%esi", "%edx");
+                     : "=a"(time)
+                     : "c"(p)
+                     : "%esi", "%edx");
     return time;
+}
 }
