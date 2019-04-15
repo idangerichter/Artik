@@ -3,7 +3,7 @@
 
 
 /**
- *  a generic class for memory access measurement
+ *  A generic class for memory access measurement
  *  different attacks may implement measurement differently due to
  *  attack specific constraints, e.g. - most attacks require some sleep
  *  between measurements.
@@ -15,7 +15,7 @@ class TimingAgent
 {
 public:
     /**
-     *  Perform a measurement on the ith cell in board
+     *  Performs a measurement on the ith cell in board
      *  returns the elapsed time.
      */
     virtual int64_t Measure(size_t i) = 0;

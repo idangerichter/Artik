@@ -33,8 +33,8 @@ int64_t ProbeTiming(void* p)
                      "    lfence             \n"
                      "    rdtsc              \n"
                      "    subl %%esi, %%eax  \n"
-    : "=a"(time)
-    : "c"(p)
-    : "%esi", "%edx");
+                     : "=a"(time)
+                     : "c"(p)
+                     : "%esi", "%edx");
     return time;
 }

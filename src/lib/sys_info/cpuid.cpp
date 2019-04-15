@@ -24,5 +24,3 @@ const uint32_t& CPUID::EDX() const
 {
     return regs[3];
 }
-
-

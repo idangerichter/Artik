@@ -17,18 +17,15 @@ int8_t* LoadFromFile(int fd, std::size_t offset, std::size_t size);
 
 Board::Board(const std::size_t size)
 : boardType(BoardType::ALLOCATED), size(size), array(new int8_t[size])
-{
-}
+{}
 
 Board::Board(void* array, std::size_t size)
 : boardType(BoardType::PRE_ALLOCATED), size(size), array((int8_t*)array)
-{
-}
+{}
 
 Board::Board(const std::string& filename, std::size_t offset, std::size_t size)
 : Board(open(filename.c_str(), O_RDONLY), offset, size == 0 ? GetFileSize(filename) : size)
-{
-}
+{}
 
 
 Board::Board(int fd, size_t offset, size_t real_size)
@@ -61,11 +58,11 @@ const int8_t& Board::operator[](const std::size_t index) const
 {
     return array[index];
 }
-int32_t Board::Measure(std::size_t index) const
+int32_t Board::Measure(size_t index) const
 {
     return ProbeTiming(&array[index]);
 }
-void Board::Flush(std::size_t index) const
+void Board::Flush(size_t index) const
 {
     MemoryFlush(&array[index]);
 }
