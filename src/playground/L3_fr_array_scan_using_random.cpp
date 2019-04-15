@@ -1,21 +1,20 @@
-#include "../main/utils/cacheutils.h"
-#include "../main/utils/intel.h"
+#include "../lib/utils/attack_surface.hpp"
+#include "intel.h"
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <unistd.h>
 
-const size_t INNER_ITERATIONS = 64 * 11; // need 2 * nlogn, and n = 64;
-const size_t LIMIT = 300;
-const size_t LENGTH = L3_CACHE_SIZE / sizeof(uint64_t);
-uint64_t secret_array[LENGTH];
+#define INNER_ITERATIONS (64 * 11) // need 2 * nlogn, and n = 64;
+#define LIMIT 300
+#define LENGTH L3_CACHE_SIZE
 
 /**
  * Copied code from stackoverflow, does whatever you think it does.
  */
 void print_bits(size_t const size, void const* const ptr)
 {
-    unsigned char* b = (unsigned char*)ptr;
+    auto* b = (unsigned char*)ptr;
     unsigned char byte;
     int i, j;
 
@@ -30,17 +29,18 @@ void print_bits(size_t const size, void const* const ptr)
     puts("");
 }
 
-void child_process(uint64_t array[])
+void child_process(AttackSurface& board)
 {
     std::cout << "Child process running" << std::endl;
     while (true)
     {
-        maccess(&array[4 * 8]);
-        maccess(&array[25 * 8]);
+        board.Access(4 * 8);
+        board.Access(25 * 8);
     }
 }
 
-void parent_process(uint64_t array[])
+
+void parent_process(AttackSurface& board)
 {
     std::cout << "Parent process running" << std::endl;
     while (true)
@@ -52,13 +52,13 @@ void parent_process(uint64_t array[])
             // flush the array out
             for (auto i = 0; i < 64; i++)
             {
-                flush(&array[i * 8]);
+                board.Flush(i * 8);
             }
             // wait
             usleep(15 * 100);
             // check if random element has returned
             int r = rand() % 64;
-            sum = sum | ((int64_t)(probe_timing(&array[r * 8]) < LIMIT) << r);
+            sum = sum | ((int64_t)(board.Measure(r * 8) < LIMIT) << r);
         }
 
         print_bits(sizeof(sum), &sum);
@@ -67,18 +67,18 @@ void parent_process(uint64_t array[])
 
 int main(int argc, char* argv[])
 {
-    srand(static_cast<unsigned int>(time(0)));
+    srand(static_cast<unsigned int>(time(nullptr)));
 
     // allocate
-    auto array = new uint64_t[LENGTH];
+    AttackSurface board(LENGTH);
 
     if (fork())
     {
-        child_process(array);
+        child_process(board);
     }
     else
     {
-        parent_process(array);
+        parent_process(board);
     }
 
     return 0;

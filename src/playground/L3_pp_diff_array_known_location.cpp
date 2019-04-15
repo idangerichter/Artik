@@ -1,38 +1,34 @@
-#include "../main/utils/cacheutils.h"
-#include "../main/utils/intel.h"
+#include "../lib/low_level/cache_intrinsics.hpp"
+#include "../lib/utils/attack_surface.hpp"
+#include "intel.h"
 #include <iostream>
 
 const size_t ITERATIONS = 100;
 const size_t LENGTH = L3_CACHE_SIZE / sizeof(uint64_t);
 uint64_t secret_array[LENGTH];
-uint64_t cache_array[LENGTH];
+
 
 #define ITERATIONS (100)
 
-int main(void)
+int main()
 {
+    AttackSurface board(LENGTH);
     long sum_good = 0;
     long sum_bad = 0;
     for (size_t x = 0; x < ITERATIONS; x++)
     {
-        // flush array from L3
-        for (size_t i = 0; i < LENGTH; i++)
-        {
-            flush(&secret_array[i]);
-            flush(&cache_array[i]);
-        }
         // fill L3 with cache array
         for (size_t i = 0; i < LENGTH; i++)
         {
-            maccess(&cache_array[i]);
+            board.Access(i);
         }
 
         // secret access
         secret_array[9] = x;
 
         // try cache attack
-        sum_good += probe_timing(&cache_array[9]);
-        sum_bad += probe_timing(&cache_array[32]);
+        sum_good += board.Measure(9);
+        sum_bad += board.Measure(47);
     }
 
     std::cout << "Expected: good > bad" << std::endl;
