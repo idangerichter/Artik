@@ -3,7 +3,7 @@
 
 int main()
 {
-    std::vector<CacheInfo> caches = CacheInfo::getAll();
+    std::vector<CacheInfo> caches = CacheInfo::GetAll();
     int i = 0;
     for (CacheInfo cacheInfo : caches)
     {

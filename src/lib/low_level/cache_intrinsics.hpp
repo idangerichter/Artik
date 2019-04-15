@@ -1,6 +1,8 @@
 #pragma once
 #include <cstdint>
 
+namespace Memory
+{
 /**
  * Provides the number of clock cycles since boot.
  */
@@ -19,3 +21,4 @@ void MemoryAccess(void* p);
  * Flush the given address.
  */
 void MemoryFlush(void* p);
+} // namespace Memory

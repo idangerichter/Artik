@@ -1,4 +1,4 @@
-#include "../lib/utils/Board.hpp"
+#include "../lib/utils/attack_surface.hpp"
 #include "intel.h"
 #include <cstdlib>
 #include <ctime>
@@ -29,7 +29,7 @@ void print_bits(size_t const size, void const* const ptr)
     puts("");
 }
 
-void child_process(Board& board)
+void child_process(AttackSurface& board)
 {
     std::cout << "Child process running" << std::endl;
     while (true)
@@ -40,7 +40,7 @@ void child_process(Board& board)
 }
 
 
-void parent_process(Board& board)
+void parent_process(AttackSurface& board)
 {
     std::cout << "Parent process running" << std::endl;
     while (true)
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     srand(static_cast<unsigned int>(time(nullptr)));
 
     // allocate
-    Board board(LENGTH);
+    AttackSurface board(LENGTH);
 
     if (fork())
     {

@@ -1,5 +1,5 @@
 #include "../lib/low_level/cache_intrinsics.hpp"
-#include "../lib/utils/Board.hpp"
+#include "../lib/utils/attack_surface.hpp"
 #include "intel.h"
 #include <iostream>
 
@@ -8,7 +8,7 @@ const size_t LENGTH = L3_CACHE_SIZE / sizeof(uint64_t);
 
 int main()
 {
-    Board secret_array(LENGTH);
+    AttackSurface secret_array(LENGTH);
     long sum_good = 0;
     long sum_bad = 0;
     for (size_t x = 0; x < ITERATIONS; x++)
