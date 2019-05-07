@@ -1,4 +1,4 @@
-#include "samplers.h"
+#include "sampler_primitives.hpp"
 
 void FlushSamplerPrimitive::Prepare(MemoryWrapper& memory, size_t index) const
 {
