@@ -19,4 +19,4 @@ set_target_properties(Lib PROPERTIES LINKER_LANGUAGE CXX)
 
 
 # Playground
-#add_subdirectory(src/playground)
+add_subdirectory(src/playground)
