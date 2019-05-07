@@ -8,6 +8,9 @@ enum class MemoryType
     PRE_ALLOCATED
 };
 
+/**
+ * A generic wrapper for a memory object that can measure time, flush memory, evict so on and so forth.
+ */
 class MemoryWrapper
 {
     public:
