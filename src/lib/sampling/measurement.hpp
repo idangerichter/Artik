@@ -1,3 +1,5 @@
+#include <cstddef>
+#include <cstdint>
 /**
  * A record of measurement results
  */
