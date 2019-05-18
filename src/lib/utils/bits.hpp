@@ -27,7 +27,7 @@ static uint64_t ExtractBits(uint64_t field, unsigned int const from, unsigned in
 /**
  * Extract the bit {bit} from the field
  */
-template <typename T> static bool ExtractBit(T field, unsigned int const bit)
+static bool ExtractBit(uint64_t field, unsigned int const bit)
 {
-    return (field & (static_cast<T>(1) << bit)) != 0;
+    return (field & (static_cast<uint64_t>(1) << bit)) != 0;
 }
