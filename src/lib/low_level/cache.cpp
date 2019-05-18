@@ -31,9 +31,9 @@
 static const unsigned int CPUID_CACHE_COMMAND = 4;
 
 CacheInfo::CacheInfo(const CPUID& c)
-: type(static_cast<CacheType>(ExtractBits(c.EAX(), 0, 4))), level(ExtractBits(c.EAX(), 5, 7)),
-  fully_associative(ExtractBit(c.EAX(), 9)), line_size(ExtractBits(c.EBX(), 0, 11) + 1),
-  cache_associativity(ExtractBits(c.EBX(), 22, 31) + 1), sets_count(c.ECX() + 1)
+: type(static_cast<CacheType>(ExtractBits(c.eax, 0, 4))), level(ExtractBits(c.eax, 5, 7)),
+  fully_associative(ExtractBit(c.eax, 9)), line_size(ExtractBits(c.ebx, 0, 11) + 1),
+  cache_associativity(ExtractBits(c.ebx, 22, 31) + 1), sets_count(c.ecx + 1)
 {
     total_cache_size = line_size * cache_associativity * sets_count;
 }
@@ -41,8 +41,7 @@ CacheInfo::CacheInfo(const CPUID& c)
 std::vector<CacheInfo> CacheInfo::GetAll()
 {
     std::vector<CacheInfo> cache_infos;
-    unsigned int i = 0;
-    while (true)
+    for (uint i = 0;; ++i)
     {
         CPUID command(CPUID_CACHE_COMMAND, i);
         CacheInfo cache_info(command);
@@ -53,8 +52,6 @@ std::vector<CacheInfo> CacheInfo::GetAll()
         }
 
         cache_infos.push_back(cache_info);
-
-        i++;
     }
     return cache_infos;
 }

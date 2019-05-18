@@ -4,24 +4,24 @@
  * create bitmask for {from, from+1, ..., to}
  * if from == to the it will mask {from}
  */
-template <typename T> static constexpr T Bitmask(unsigned int const from, unsigned int const to)
+static constexpr uint64_t Bitmask(unsigned int const from, unsigned int const to)
 {
     if (from == to)
     {
-        return from == 0 ? 0 : static_cast<T>(1u << from);
+        return from == 0 ? 0 : static_cast<uint64_t>(1u << from);
     }
     else
     {
-        return (static_cast<T>(-1) << from) & (static_cast<T>(-1) >> ((sizeof(T) * 8) - to - 1));
+        return (static_cast<uint64_t>(-1) << from) & (static_cast<uint64_t>(-1) >> ((sizeof(uint64_t) * 8) - to - 1));
     }
 }
 
 /**
  * Extract the bits {from, from+1, ..., to} from field.
  */
-template <typename T> static T ExtractBits(T field, unsigned int const from, unsigned int const to)
+static uint64_t ExtractBits(uint64_t field, unsigned int const from, unsigned int const to)
 {
-    return (field & Bitmask<T>(from, to)) >> from;
+    return (field & Bitmask(from, to)) >> from;
 }
 
 /**

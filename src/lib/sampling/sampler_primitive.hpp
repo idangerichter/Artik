@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../utils/memory_wrapper.hpp"
+#include "measurement.hpp"
 #include <cstddef>
 /**
  * An attack primitive. Responsible for accurately measuring the time to access memory.
@@ -21,5 +22,5 @@ class SamplerPrimitive
      * @param memory The memory to execute the sampling on
      * @param index the index of the sampled cell
      */
-    virtual int32_t Sample(MemoryWrapper& memory, size_t index) const = 0;
+    virtual Measurement Sample(MemoryWrapper& memory, size_t index) const = 0;
 };

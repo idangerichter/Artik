@@ -1,5 +1,4 @@
 #pragma once
-
 #include "../utils/memory_wrapper.hpp"
 #include "measurement.hpp"
 #include <vector>

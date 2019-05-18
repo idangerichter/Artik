@@ -1,3 +1,5 @@
+#pragma once
+
 #include <cstddef>
 #include <cstdint>
 /**
@@ -5,8 +7,8 @@
  */
 struct Measurement
 {
+    Measurement(size_t index, int32_t time);
+
     size_t index;
     int32_t time;
-
-    Measurement(size_t index, int32_t time);
 };

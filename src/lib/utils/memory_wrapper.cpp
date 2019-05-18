@@ -6,14 +6,26 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-/**
- * Get the file size in bytes
- */
-static std::size_t GetFileSize(int fd);
-/**
- * mmap the given fd at the given offset for the given size and return the address
- */
-int8_t* LoadFromFile(int fd, std::size_t offset, std::size_t size);
+
+namespace
+{
+// Get the file size in bytes
+std::size_t GetFileSize(int fd)
+{
+    std::size_t size = lseek(fd, 0, SEEK_END);
+    lseek(fd, 0, SEEK_SET);
+    return size;
+}
+// mmap the given fd at the given offset for the given size and return the address
+int8_t* LoadFromFile(int fd, std::size_t offset, std::size_t size)
+{
+    auto memory = (int8_t*)mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, offset);
+    if (memory == (void*)-1)
+        throw std::runtime_error("Failed to allocated the required memory size");
+    return memory;
+}
+
+} // namespace
 
 MemoryWrapper::MemoryWrapper(std::size_t size)
 : memory_type(MemoryType::ALLOCATED), size(size), array(new int8_t[size])
@@ -44,19 +56,18 @@ MemoryWrapper::MemoryWrapper(const std::string& filename, std::size_t offset, st
 
 MemoryWrapper::~MemoryWrapper()
 {
-    if (this->array != nullptr)
+    if (this->array == nullptr) return;
+
+    switch (memory_type)
     {
-        switch (memory_type)
-        {
-        case MemoryType::MAPPED_MEMORY:
-            munmap((void*)this->array, this->size);
-            break;
-        case MemoryType::ALLOCATED:
-            delete[](this->array);
-            break;
-        case MemoryType::PRE_ALLOCATED:
-            break;
-        }
+    case MemoryType::MAPPED_MEMORY:
+        munmap((void*)this->array, this->size);
+        break;
+    case MemoryType::ALLOCATED:
+        delete[](this->array);
+        break;
+    case MemoryType::PRE_ALLOCATED:
+        break;
     }
 }
 int8_t& MemoryWrapper::operator[](const std::size_t index)
@@ -77,7 +88,7 @@ void MemoryWrapper::Flush(std::size_t index) const
 }
 void MemoryWrapper::FlushAll() const
 {
-    for (std::size_t i = 0; i < size; i++)
+    for (std::size_t i = 0; i < size; ++i)
     {
         Flush(i);
     }
@@ -90,23 +101,8 @@ void MemoryWrapper::Access(std::size_t index) const
 
 void MemoryWrapper::LoadToCache() const
 {
-    for (std::size_t i = 0; i < size; i++)
+    for (std::size_t i = 0; i < size; ++i)
     {
         Access(i);
     }
 }
-// region Utils
-
-std::size_t GetFileSize(int fd)
-{
-    std::size_t size = lseek(fd, 0, SEEK_END);
-    lseek(fd, 0, SEEK_SET);
-    return size;
-}
-int8_t* LoadFromFile(const int fd, const std::size_t offset, const std::size_t size)
-{
-    auto memory = (int8_t*)mmap(nullptr, size, PROT_READ, MAP_SHARED, fd, offset);
-    if (memory == (void*)-1) throw std::runtime_error("Failed to allocated the required memory size");
-    return memory;
-}
-// endregion
