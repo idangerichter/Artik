@@ -15,12 +15,12 @@ class SamplerPrimitive
      * @param memory The memory to execute the sampling on
      * @param index the index of the sampled cell
      */
-    virtual void Prepare(MemoryWrapper& memory, size_t index) const = 0;
+    virtual void Prepare(MemoryWrapper& memory, size_t index) const;
     /**
      * Sample the access time and return the result. Default implementation would be to call `memory.Access(index)`,
      * but we provide the functionality to override it.
      * @param memory The memory to execute the sampling on
      * @param index the index of the sampled cell
      */
-    virtual Measurement Sample(MemoryWrapper& memory, size_t index) const = 0;
+    virtual Measurement Sample(MemoryWrapper& memory, size_t index) const;
 };

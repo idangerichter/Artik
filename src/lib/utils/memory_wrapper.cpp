@@ -46,6 +46,9 @@ MemoryWrapper::MemoryWrapper(const std::string& filename, std::size_t offset, st
     {
         throw std::runtime_error("Could not open the given file");
     }
+    if (size == 0) {
+        size = GetFileSize(fd);
+    }
 
     this->size = std::min(std::max(fd - offset, 0UL), size);
     this->array = LoadFromFile(fd, offset, size);

