@@ -7,6 +7,7 @@ class BaseMemory
     BaseMemory(int8_t* array, std::function<void(int8_t*)> destructor);
     BaseMemory(BaseMemory&& other) noexcept;
     BaseMemory& operator=(BaseMemory&& other) noexcept;
+    ~BaseMemory();
 
     // copy constructor is disabled
     BaseMemory(const BaseMemory&) = delete;

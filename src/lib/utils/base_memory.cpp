@@ -15,3 +15,7 @@ BaseMemory& BaseMemory::operator=(BaseMemory&& other) noexcept
     destructor = other.destructor;
     return *this;
 }
+BaseMemory::~BaseMemory()
+{
+    destructor(this->array);
+}
