@@ -1,7 +1,7 @@
 #include "calibration.hpp"
 #include <iostream>
 
-const double THRESHOLD = 150000;
+const double THRESHOLD = 220;
 
 
 class SimpleScoreProvider : public ScoreProvider
@@ -14,7 +14,6 @@ class SimpleScoreProvider : public ScoreProvider
     public:
     double normalize(Measurement measurement) const override
     {
-        std::cout << "index: " << measurement.index << " time: " << measurement.time << std::endl;
         switch (attackType)
         {
         case AttackType::FlushReload:

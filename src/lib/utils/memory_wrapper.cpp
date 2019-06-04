@@ -28,12 +28,14 @@ int8_t* LoadFromFile(int fd, std::size_t offset, std::size_t size)
 } // namespace
 
 MemoryWrapper::MemoryWrapper(std::size_t size)
-: memory_type(MemoryType::ALLOCATED), size(size), array(new int8_t[size])
+: memory_type(MemoryType::ALLOCATED), size(size),
+  array(std::make_shared<BaseMemory>(new int8_t[size], [](auto arr) { delete[] arr; }))
 {
 }
 
 MemoryWrapper::MemoryWrapper(void* array, std::size_t size)
-: memory_type(MemoryType::PRE_ALLOCATED), size(size), array((int8_t*)array)
+: memory_type(MemoryType::PRE_ALLOCATED), size(size),
+  array(std::make_shared<BaseMemory>((int8_t*)array, [](auto _) {}))
 {
 }
 
@@ -46,48 +48,33 @@ MemoryWrapper::MemoryWrapper(const std::string& filename, std::size_t offset, st
     {
         throw std::runtime_error("Could not open the given file");
     }
-    if (size == 0) {
+    if (size == 0)
+    {
         size = GetFileSize(fd);
     }
 
     this->size = std::min(std::max(fd - offset, 0UL), size);
-    this->array = LoadFromFile(fd, offset, size);
+    this->array = std::make_shared<BaseMemory>(LoadFromFile(fd, offset, size),
+                                               [size](auto arr) { munmap((void*)arr, size); });
 
     close(fd);
 }
 
-
-MemoryWrapper::~MemoryWrapper()
-{
-    if (this->array == nullptr) return;
-
-    switch (memory_type)
-    {
-    case MemoryType::MAPPED_MEMORY:
-        munmap((void*)this->array, this->size);
-        break;
-    case MemoryType::ALLOCATED:
-        delete[](this->array);
-        break;
-    case MemoryType::PRE_ALLOCATED:
-        break;
-    }
-}
 int8_t& MemoryWrapper::operator[](const std::size_t index)
 {
-    return array[index];
+    return array->array[index];
 }
 const int8_t& MemoryWrapper::operator[](const std::size_t index) const
 {
-    return array[index];
+    return array->array[index];
 }
 int32_t MemoryWrapper::Measure(std::size_t index) const
 {
-    return Memory::ProbeTiming(&array[index]);
+    return Memory::ProbeTiming(&array->array[index]);
 }
 void MemoryWrapper::Flush(std::size_t index) const
 {
-    Memory::MemoryFlush(&array[index]);
+    Memory::MemoryFlush(&array->array[index]);
 }
 void MemoryWrapper::FlushAll() const
 {
@@ -99,7 +86,7 @@ void MemoryWrapper::FlushAll() const
 
 void MemoryWrapper::Access(std::size_t index) const
 {
-    Memory::MemoryAccess(&array[index]);
+    Memory::MemoryAccess(&array->array[index]);
 }
 
 void MemoryWrapper::LoadToCache() const

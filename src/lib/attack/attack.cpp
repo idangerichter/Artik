@@ -1,18 +1,25 @@
+#include <utility>
+
 #include "attack.hpp"
 #include "../sampling/calibration.hpp"
 #include <stdexcept>
 
-Attack::Attack(MemoryWrapper& memoryWrapper,
+Attack::Attack(MemoryWrapper memoryWrapper,
                AttackType attackType,
                std::unique_ptr<Sampler> sampler,
                std::unique_ptr<ScoreProvider> scoreProvider)
 : sampler(std::move(sampler)), scoreProvider(std::move(scoreProvider)), attackType(attackType),
-  memoryWrapper(memoryWrapper)
+  memoryWrapper(std::move(memoryWrapper)), attackResults(), samples()
 {
+    attackResults = std::vector<AttackResult>(this->sampler->GetRequiredSize());
+    samples = std::vector<Measurement>(this->sampler->GetRequiredSize());
 }
-Attack::Attack(MemoryWrapper& memoryWrapper, AttackType attackType, std::unique_ptr<Sampler> sampler)
-: attackType(attackType), sampler(std::move(sampler)), memoryWrapper(memoryWrapper)
+Attack::Attack(MemoryWrapper memoryWrapper, AttackType attackType, std::unique_ptr<Sampler> sampler)
+: attackType(attackType), sampler(std::move(sampler)), memoryWrapper(std::move(memoryWrapper)),
+  attackResults(), samples()
 {
+    attackResults = std::vector<AttackResult>(this->sampler->GetRequiredSize());
+    samples = std::vector<Measurement>(this->sampler->GetRequiredSize());
 }
 
 void Attack::calibrate()
@@ -22,22 +29,25 @@ void Attack::calibrate()
     std::vector<Measurement> measurements;
     scoreProvider = std::move(calibration.Calibrate(measurements, attackType));
 }
-std::vector<AttackResult> Attack::attack() const
+void Attack::attack()
 {
     if (!scoreProvider)
     {
         throw std::logic_error("Calibration was not called");
     }
-    std::vector<AttackResult> result;
-    std::vector<Measurement> samples = sampler->Sample(memoryWrapper);
+    sampler->Sample(memoryWrapper, samples);
+    size_t i = 0;
     for (const Measurement& measurement : samples)
     {
-        AttackResult attackResult(measurement.index, scoreProvider->normalize(measurement));
-        result.push_back(attackResult);
+        attackResults[i] = AttackResult(measurement.index, scoreProvider->normalize(measurement));
+        i++;
     }
-    return result;
 }
 
 AttackResult::AttackResult(size_t index, double score) : index(index), score(score)
+{
+}
+
+AttackResult::AttackResult() : index(0), score(0)
 {
 }

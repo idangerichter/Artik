@@ -14,7 +14,12 @@ class Sampler
     /**
      * Perform a single sampling of the pattern, returning the results.
      * @param memory Memory to operate on
+     * @param measurementsVector vector to put the results on it.
      * @return list of measurements sorted by time of measurement
      */
-    virtual std::vector<Measurement> Sample(MemoryWrapper& memory) const = 0;
+    virtual void Sample(MemoryWrapper& memory, std::vector<Measurement>& measurementsVector) = 0;
+    /**
+     * Returns the required size for the vector of the sampling
+     */
+    virtual size_t GetRequiredSize() const = 0;
 };

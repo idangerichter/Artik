@@ -1,4 +1,6 @@
 #pragma once
+#include "memory/base_memory.hpp"
+#include <memory>
 #include <string>
 
 enum class MemoryType
@@ -35,10 +37,6 @@ class MemoryWrapper
      * @param size The size of the array
      */
     MemoryWrapper(void* array, std::size_t size);
-    /**
-     * Free all used memory
-     */
-    ~MemoryWrapper();
 
     int8_t& operator[](std::size_t index);
     const int8_t& operator[](std::size_t index) const;
@@ -54,9 +52,7 @@ class MemoryWrapper
      */
     void Flush(std::size_t index) const;
 
-    /**
-     * Flush the whole array from memory
-     */
+    // Flush the whole array from memory
     void FlushAll() const;
 
     /**
@@ -65,9 +61,7 @@ class MemoryWrapper
      */
     void Access(std::size_t index) const;
 
-    /**
-     * Load the array to the cache (hopefully)
-     */
+    // Load the array to the cache (hopefully)
     void LoadToCache() const;
 
     /**
@@ -77,5 +71,5 @@ class MemoryWrapper
     std::size_t size;
 
     private:
-    int8_t* array;
+    std::shared_ptr<BaseMemory> array;
 };
