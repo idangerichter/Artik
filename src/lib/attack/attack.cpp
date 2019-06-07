@@ -1,7 +1,7 @@
 #include <utility>
 
-#include "attack.hpp"
 #include "../sampling/calibration.hpp"
+#include "attack.hpp"
 #include <stdexcept>
 
 Attack::Attack(MemoryWrapper memoryWrapper,

@@ -66,14 +66,16 @@ size_t AverageSampler::GetRequiredSize() const
 void AverageSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& measurementsVector)
 {
     sampler->Sample(memory, aggregate_vector);
-    for (size_t j = 0; j < aggregate_vector.size(); j++) {
+    for (size_t j = 0; j < aggregate_vector.size(); j++)
+    {
         measurementsVector[j] = aggregate_vector[j];
     }
 
     for (size_t i = 0; i < count - 1; i++)
     {
         sampler->Sample(memory, aggregate_vector);
-        for (size_t j = 0; j < aggregate_vector.size(); j++) {
+        for (size_t j = 0; j < aggregate_vector.size(); j++)
+        {
             measurementsVector[j].time += aggregate_vector[j].time;
         }
 
@@ -81,7 +83,8 @@ void AverageSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& mea
             std::this_thread::sleep_for(std::chrono::nanoseconds(between_rounds_delay));
     }
 
-    for (size_t j = 0; j < aggregate_vector.size(); j++) {
+    for (size_t j = 0; j < aggregate_vector.size(); j++)
+    {
         measurementsVector[j].time /= count;
     }
 }
