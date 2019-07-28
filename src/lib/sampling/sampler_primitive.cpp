@@ -7,5 +7,5 @@ void SamplerPrimitive::Prepare(MemoryWrapper& memory, size_t index) const
 
 Measurement SamplerPrimitive::Sample(MemoryWrapper& memory, size_t index) const
 {
-    return Measurement(index, memory.Measure(index));
+    return {index, memory.Measure(index)};
 }

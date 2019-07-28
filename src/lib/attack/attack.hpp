@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../sampling/calibration.hpp"
+#include "../calibration/calibration.hpp"
 #include "../sampling/sampler.hpp"
-#include "../sampling/score_provider.hpp"
+#include "../calibration/score_provider.hpp"
 #include <memory>
 
 struct AttackResult
