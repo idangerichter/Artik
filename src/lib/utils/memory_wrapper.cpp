@@ -17,7 +17,7 @@ MemoryWrapper::MemoryWrapper(size_t size):
 MemoryWrapper::MemoryWrapper(void* array, size_t size):
     memory_type_(MemoryType::PRE_ALLOCATED), 
     size_(size),
-    array_((Byte*) array, [](auto array){})
+    array_(reinterpret_cast<Byte*>(array), [](auto array){})
 {
 }
 

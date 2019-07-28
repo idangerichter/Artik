@@ -2,7 +2,7 @@
 
 void SamplerPrimitive::Prepare(MemoryWrapper& memory, size_t index) const
 {
-    // no-op
+    // Default Prepare is no-op.
 }
 
 Measurement SamplerPrimitive::Sample(MemoryWrapper& memory, size_t index) const

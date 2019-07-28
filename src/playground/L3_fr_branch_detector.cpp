@@ -1,6 +1,7 @@
 #include "../lib/attack/attack.hpp"
 #include "../lib/sampling/sampler_primitives.hpp"
-#include "../lib/sampling/samplers.hpp"
+#include "../lib/sampling/samplers/list_sampler.hpp"
+#include "../lib/sampling/samplers/average_sampler.hpp"
 #include "../lib/utils/memory_wrapper.hpp"
 #include "../main/utils/cacheutils.h"
 #include "../main/utils/intel.h"

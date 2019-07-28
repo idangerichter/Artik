@@ -1,6 +1,5 @@
 #pragma once
 #include "measurement.hpp"
-#include <stdexcept>
 
 class ScoreProvider {
 public:

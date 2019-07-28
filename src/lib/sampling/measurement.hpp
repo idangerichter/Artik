@@ -2,13 +2,11 @@
 
 #include <cstddef>
 #include <cstdint>
-/**
- * A record of measurement results
- */
+
+//  A record of measurement results 
 struct Measurement
 {
-    Measurement(size_t index, int32_t time);
-    Measurement();
+    explicit Measurement(size_t index = 0, int32_t time = 0);
     
     size_t index;
     int32_t time;

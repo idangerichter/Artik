@@ -21,7 +21,7 @@ struct CacheInfo
     // Parse cpu id command to get cache information
     explicit CacheInfo(const CPUID& cache_command);
 
-     // The type of the given cache: data cache, instruction cache or unified.
+    // The type of the given cache: data cache, instruction cache or unified.
     CacheType type;
     // The cache level, L1, L2 or L3 (1 based)
     int32_t level;

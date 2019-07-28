@@ -3,24 +3,22 @@
 #include "../utils/memory_wrapper.hpp"
 #include "measurement.hpp"
 #include <cstddef>
-/**
- * An attack primitive. Responsible for accurately measuring the time to access memory.
- * There is a different implementation for each attack since each requires different preparation
- */
+
+
+// Responsible for accurately measuring the time to access memory while handling preperations and so on.
+// For example:
+//      Flush+Reload - The FlushReloadSampler flushes the given index in Prepare and access in Sample.
 class SamplerPrimitive
 {
-    public:
-    /**
-     * Prepare to perform the sampling on the given index. For example, FlushReloadSampler would flush the given index.
-     * @param memory The memory to execute the sampling on
-     * @param index the index of the sampled cell
-     */
+public:
+    // Prepare to perform the sampling on the given index.
+    // @param memory The memory to execute the sampling on
+    // @param index the index of the sampled cell
     virtual void Prepare(MemoryWrapper& memory, size_t index) const;
-    /**
-     * Sample the access time and return the result. Default implementation would be to call `memory.Access(index)`,
-     * but we provide the functionality to override it.
-     * @param memory The memory to execute the sampling on
-     * @param index the index of the sampled cell
-     */
+
+    // Sample the access time and return the result.
+    // Default implementation would be to call `memory.Access(index)`.
+    // @param memory The memory to execute the sampling on
+    // @param index the index of the sampled cell
     virtual Measurement Sample(MemoryWrapper& memory, size_t index) const;
 };
