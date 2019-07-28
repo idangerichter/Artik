@@ -13,14 +13,13 @@ const double MIN_SCORE = 1.0;
 
 Attack getAttack(char* path, size_t first_index, size_t second_index)
 {
-    MemoryWrapper wrapper(path);
     std::vector<size_t> indexes = { first_index, second_index };
     std::unique_ptr<FlushSamplerPrimitive> primitive = std::make_unique<FlushSamplerPrimitive>();
     std::unique_ptr<Sampler> sampler =
     std::make_unique<ListSampler>(indexes, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY, std::move(primitive));
     std::unique_ptr<AverageSampler> averageSampler =
     std::make_unique<AverageSampler>(std::move(sampler), 100, 0);
-    Attack attack(wrapper, AttackType::FlushReload, std::move(averageSampler));
+    Attack attack(MemoryWrapper(path), AttackType::FlushReload, std::move(averageSampler));
 
     attack.calibrate();
     return attack;

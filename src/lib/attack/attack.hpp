@@ -20,11 +20,11 @@ class Attack
     void calibrate();
     void attack();
 
-    Attack(MemoryWrapper memoryWrapper,
+    Attack(MemoryWrapper&& memoryWrapper,
            AttackType attackType,
            std::unique_ptr<Sampler> sampler,
            std::unique_ptr<ScoreProvider> scoreProvider);
-    Attack(MemoryWrapper memoryWrapper, AttackType attackType, std::unique_ptr<Sampler> sampler);
+    Attack(MemoryWrapper&& memoryWrapper, AttackType attackType, std::unique_ptr<Sampler> sampler);
 
     std::vector<AttackResult> attackResults;
     std::vector<Measurement> samples;

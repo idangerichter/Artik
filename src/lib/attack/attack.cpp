@@ -4,17 +4,19 @@
 #include "attack.hpp"
 #include <stdexcept>
 
-Attack::Attack(MemoryWrapper memoryWrapper,
+Attack::Attack(MemoryWrapper&& memoryWrapper,
                AttackType attackType,
                std::unique_ptr<Sampler> sampler,
-               std::unique_ptr<ScoreProvider> scoreProvider)
-: sampler(std::move(sampler)), scoreProvider(std::move(scoreProvider)), attackType(attackType),
-  memoryWrapper(std::move(memoryWrapper)), attackResults(), samples()
+               std::unique_ptr<ScoreProvider> scoreProvider): 
+    sampler(std::move(sampler)), 
+    scoreProvider(std::move(scoreProvider)),
+    attackType(attackType),
+    memoryWrapper(std::move(memoryWrapper)), attackResults(), samples()
 {
     attackResults = std::vector<AttackResult>(this->sampler->GetRequiredSize());
     samples = std::vector<Measurement>(this->sampler->GetRequiredSize());
 }
-Attack::Attack(MemoryWrapper memoryWrapper, AttackType attackType, std::unique_ptr<Sampler> sampler)
+Attack::Attack(MemoryWrapper&& memoryWrapper, AttackType attackType, std::unique_ptr<Sampler> sampler)
 : attackType(attackType), sampler(std::move(sampler)), memoryWrapper(std::move(memoryWrapper)),
   attackResults(), samples()
 {
