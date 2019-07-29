@@ -6,18 +6,18 @@ namespace Memory
 // Provides the number of clock cycles since boot.
 __attribute__((always_inline)) int64_t rdtsc()
 {
-    unsigned long long a, d;
+    unsigned long long eax, edx;
     asm volatile("mfence");
-    asm volatile("rdtsc" : "=a"(a), "=d"(d));
-    a = (d << 32u) | a;
+    asm volatile("rdtsc" : "=a"(eax), "=d"(edx));
+    eax = (edx << 32u) | eax;
     asm volatile("mfence");
-    return a;
+    return eax;
 }
 
 // Probe the time in cycles it take to access {p}
 __attribute__((always_inline)) int32_t ProbeTiming(void* p)
 {
-    volatile long time;
+    volatile int64_t time;
 
     asm __volatile__("    mfence             \n"
                      "    lfence             \n"
@@ -31,7 +31,7 @@ __attribute__((always_inline)) int32_t ProbeTiming(void* p)
                      : "=a"(time)
                      : "c"(p)
                      : "%esi", "%edx");
-    return time;
+    return static_cast<int32_t>(time);
 }
 // Access the address that was given.
 __attribute__((always_inline)) void MemoryAccess(void* p)

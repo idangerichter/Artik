@@ -1,7 +1,10 @@
 #include "cache.hpp"
 #include "../utils/bits.hpp"
 #include <iostream>
+
 /**
+ * We use this scheme for extraction
+ *
  * CPUID(4) outputs the following:
     EAX:
     31         26 25                    14 13    10  9  8 7    5 4        0
@@ -30,18 +33,53 @@
  */
 static const unsigned int CPUID_CACHE_COMMAND = 4;
 
-CacheInfo::CacheInfo(const CPUID& c)
-: type(static_cast<CacheType>(ExtractBits(c.eax, 0, 4))), level(ExtractBits(c.eax, 5, 7)),
-  fully_associative(ExtractBit(c.eax, 9)), line_size(ExtractBits(c.ebx, 0, 11) + 1),
-  cache_associativity(ExtractBits(c.ebx, 22, 31) + 1), sets_count(c.ecx + 1)
+namespace
 {
-    total_cache_size = line_size * cache_associativity * sets_count;
+CacheType GetType(const CPUID& cid)
+{
+    return static_cast<CacheType>(ExtractBits(cid.eax, 0, 4));
+}
+
+int32_t GetLevel(const CPUID& cid)
+{
+    return ExtractBits(cid.eax, 5, 7);
+}
+bool GetFullyAssociative(const CPUID& cid)
+{
+    return ExtractBit(cid.eax, 9);
+}
+
+int32_t GetLineSize(const CPUID& cid)
+{
+    return ExtractBits(cid.ebx, 0, 11) + 1;
+}
+
+int32_t GetCacheAssociativity(const CPUID& cid)
+{
+    return ExtractBits(cid.ebx, 22, 31) + 1;
+}
+
+int32_t GetSetsCount(const CPUID& cid)
+{
+    return cid.ecx + 1;
+}
+} // namespace
+
+CacheInfo::CacheInfo(const CPUID& c)
+: type(GetType(c)),
+  level(GetLevel(c)),
+  fully_associative(GetFullyAssociative(c)),
+  line_size(GetLineSize(c)),
+  cache_associativity(GetCacheAssociativity(c)),
+  sets_count(GetSetsCount(c)),
+  total_cache_size(line_size * cache_associativity * sets_count)
+{
 }
 
 std::vector<CacheInfo> CacheInfo::GetAll()
 {
     std::vector<CacheInfo> cache_infos;
-    for (uint i = 0;; ++i)
+    for (size_t i = 0;; ++i)
     {
         CPUID command(CPUID_CACHE_COMMAND, i);
         CacheInfo cache_info(command);

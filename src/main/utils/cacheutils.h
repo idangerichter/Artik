@@ -3,7 +3,7 @@
 
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-
+/*
 long probe_timing(void* adrs)
 {
     volatile long time;
@@ -43,5 +43,5 @@ void flush(void* p)
 {
     asm volatile("clflush 0(%0)\n" : : "c"(p) : "rax");
 }
-
+*/
 #endif
