@@ -37,7 +37,7 @@ public:
   void Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results);
 
 private:
-  MemoryWrapper memory_wrapper_;
+  std::unique_ptr<MemoryWrapper> memory_wrapper_;
   AttackType attack_type_;
   std::shared_ptr<Sampler> sampler_;
   std::shared_ptr<ScoreProvider> score_provider_;

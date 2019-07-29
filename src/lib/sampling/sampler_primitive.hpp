@@ -17,7 +17,7 @@ public:
     virtual void Prepare(MemoryWrapper& memory, size_t index) const;
 
     // Sample the access time and return the result.
-    // Default implementation would be to call `memory.Access(index)`.
+    // Default implementation would be to call `memory.Measure(index)`.
     // @param memory The memory to execute the sampling on
     // @param index the index of the sampled cell
     virtual Measurement Sample(MemoryWrapper& memory, size_t index) const;

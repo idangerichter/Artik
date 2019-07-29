@@ -1,7 +1,8 @@
 #include "simple_score_provider.hpp"
 
-SimpleScoreProvider::SimpleScoreProvider(AttackType type, double threshold)
-: attack_type_(type), threshold_(threshold)
+SimpleScoreProvider::SimpleScoreProvider(AttackType type, double threshold) :
+  attack_type_(type),
+  threshold_(threshold)
 {
 }
 double SimpleScoreProvider::Normalize(Measurement measurement) const

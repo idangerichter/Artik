@@ -16,7 +16,7 @@ BreakConstructorInitializers: AfterColon
 ColumnLimit: 100
 CommentPragmas: ''
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ConstructorInitializerIndentWidth: 0
+ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 2
 Cpp11BracedListStyle: false
 DerivePointerBinding: false

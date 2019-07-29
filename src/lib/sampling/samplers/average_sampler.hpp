@@ -16,5 +16,5 @@ private:
   const size_t count_;
   
   // Due to performance issues, we allocate the vector once.
-  std::vector<Measurement> aggregate_vector_;
+  std::vector<Measurement> temp_vector_;
 };

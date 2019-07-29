@@ -15,7 +15,7 @@ public:
   size_t GetRequiredSize() const override;
 
 private:
-  const std::vector<size_t>& indices_;
+  const std::vector<size_t> indices_;
   const size_t sample_measure_delay_;
   const size_t between_items_delay_;
   const std::shared_ptr<SamplerPrimitive> sampler_primitive_;
