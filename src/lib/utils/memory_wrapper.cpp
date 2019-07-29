@@ -28,7 +28,7 @@ MemoryWrapper::MemoryWrapper(const std::string& filename, size_t offset, size_t 
 
 MemoryWrapper::MemoryWrapper(const FileWrapper&& file, size_t offset, size_t size):
     memory_type_(MemoryType::MAPPED_MEMORY),
-    size_(size != 0 ? std::min(size,file.size_) : file.size_),
+    size_(size != 0 ? std::min(size,file.GetSize()) : file.GetSize()),
     array_(file.LoadToMemory(offset, size_), [this](auto array){ FileWrapper::UnloadFromMemory(array, size_); })
 {
 }

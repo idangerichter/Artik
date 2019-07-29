@@ -7,15 +7,15 @@ AttackManager::AttackManager(MemoryWrapper&& memory_wrapper,
                              AttackType attack_type,
                              std::shared_ptr<Sampler> sampler,
                              std::shared_ptr<ScoreProvider> score_provider) :
-AttackManager(std::move(memory_wrapper), attack_type, sampler)
+  AttackManager(std::move(memory_wrapper), attack_type, sampler)
 {
   score_provider_ = score_provider;
 }
 
 AttackManager::AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type, std::shared_ptr<Sampler> sampler) :
-sampler_(std::move(sampler)),
-attack_type_(attack_type),
-memory_wrapper_(std::move(memory_wrapper))
+  sampler_(sampler),
+  attack_type_(attack_type),
+  memory_wrapper_(std::make_unique<MemoryWrapper>(std::move(memory_wrapper)))
 {
 }
 
@@ -31,8 +31,8 @@ void AttackManager::Attack(std::vector<Measurement>& measurements, std::vector<A
   {
     throw std::logic_error("Calibration was not called");
   }
-  sampler_->Sample(memory_wrapper_, measurements);
-  measurements.size();
+
+  sampler_->Sample(*memory_wrapper_, measurements);
 
   results.reserve(results.size() + sampler_->GetRequiredSize());
 

@@ -9,47 +9,54 @@
 
 namespace
 {
-size_t GetSize(int fd)
+size_t GetFileSize(int fd)
 {
-    if (fd == -1)
-    {
-        return 0;
-    }
+  if (fd == -1)
+  {
+    return 0;
+  }
 
-    size_t size = lseek(fd, 0, SEEK_END);
-    lseek(fd, 0, SEEK_SET);
+  // off_t is signed, and we return signed size from this method
+  off_t size = lseek(fd, 0, SEEK_END);
+  lseek(fd, 0, SEEK_SET);
 
-    return size;
+  return size;
 }
 } // namespace
 
-FileWrapper::FileWrapper(const std::string& filename)
-: fd_(open(filename.c_str(), O_RDONLY)), size_(GetSize(fd_))
+FileWrapper::FileWrapper(const std::string& filename) :
+  fd_(open(filename.c_str(), O_RDONLY)),
+  size_(GetFileSize(fd_))
 {
-    if (fd_ == -1) throw std::runtime_error("Could not open the given file");
+  if (fd_ == -1) throw std::runtime_error("Could not open the given file");
 }
 
-FileWrapper::FileWrapper(FileWrapper&& file) : fd_(file.fd_)
+FileWrapper::FileWrapper(FileWrapper&& file) : fd_(file.fd_), size_(file.size_)
 {
-    file.fd_ = -1;
+  file.fd_ = -1;
 }
 
 Byte* FileWrapper::LoadToMemory(size_t offset, size_t size) const
 {
-    Byte* memory = reinterpret_cast<Byte*>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd_, offset));
-    if (memory == reinterpret_cast<Byte*>(-1))
-    {
-        throw std::runtime_error("Failed to allocated the required memory size");
-    }
-    return memory;
+  Byte* memory = reinterpret_cast<Byte*>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd_, offset));
+  if (memory == reinterpret_cast<Byte*>(-1))
+  {
+    throw std::runtime_error("Failed to allocated the required memory size");
+  }
+  return memory;
 }
 
 bool FileWrapper::UnloadFromMemory(Byte* memory, size_t size)
 {
-    return munmap(reinterpret_cast<void*>(memory), size) == 0;
+  return munmap(reinterpret_cast<void*>(memory), size) == 0;
+}
+
+size_t FileWrapper::GetSize() const
+{
+  return size_;
 }
 
 FileWrapper::~FileWrapper()
 {
-    close(fd_);
+  close(fd_);
 }
