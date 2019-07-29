@@ -8,6 +8,8 @@ SimpleSampler::SimpleSampler(size_t index, size_t delay, std::shared_ptr<Sampler
 
 void SimpleSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& measurements_vector)
 {
+  measurements_vector.reserve(measurements_vector.size() + GetRequiredSize());
+
   sampler_primitive_->Prepare(memory, index_);
 
   if (delay_ != 0)
@@ -15,7 +17,7 @@ void SimpleSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& meas
     std::this_thread::sleep_for(std::chrono::nanoseconds(delay_));
   }
 
-  measurements_vector[0] = sampler_primitive_->Sample(memory, index_);
+  measurements_vector.push_back(sampler_primitive_->Sample(memory, index_));
 }
 
 size_t SimpleSampler::GetRequiredSize() const

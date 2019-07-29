@@ -4,17 +4,18 @@
 ListSampler::ListSampler(const std::vector<size_t>& indices,
                          size_t sample_measure_delay,
                          size_t between_items_delay,
-                         std::shared_ptr<SamplerPrimitive> sampler_primitive):
-  indices_(indices),
-  sample_measure_delay_(sample_measure_delay),
-  between_items_delay_(between_items_delay),
-  sampler_primitive_(std::move(sampler_primitive))
+                         std::shared_ptr<SamplerPrimitive> sampler_primitive) :
+indices_(indices),
+sample_measure_delay_(sample_measure_delay),
+between_items_delay_(between_items_delay),
+sampler_primitive_(std::move(sampler_primitive))
 {
 }
 
 void ListSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& measurements_vector)
 {
-  size_t i = 0;
+  measurements_vector.reserve(measurements_vector.size() + GetRequiredSize());
+
   for (auto const& index : indices_)
   {
     sampler_primitive_->Prepare(memory, index);
@@ -24,14 +25,12 @@ void ListSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& measur
       std::this_thread::sleep_for(std::chrono::nanoseconds(sample_measure_delay_));
     }
 
-    measurements_vector[i] = sampler_primitive_->Sample(memory, index);
+    measurements_vector.push_back(sampler_primitive_->Sample(memory, index));
 
     if (between_items_delay_ != 0)
     {
       std::this_thread::sleep_for(std::chrono::nanoseconds(between_items_delay_));
     }
-
-    i++;
   }
 }
 

@@ -14,5 +14,7 @@ private:
   const std::shared_ptr<Sampler> sampler_;
   const size_t between_rounds_delay_;
   const size_t count_;
+  
+  // Due to performance issues, we allocate the vector once.
   std::vector<Measurement> aggregate_vector_;
 };

@@ -12,12 +12,12 @@ BinPackParameters: false
 BreakBeforeBinaryOperators: false
 BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: false
-BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializers: AfterColon
 ColumnLimit: 100
 CommentPragmas: ''
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 0
-ContinuationIndentWidth: 0
+ContinuationIndentWidth: 2
 Cpp11BracedListStyle: false
 DerivePointerBinding: false
 IndentCaseLabels: false

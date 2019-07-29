@@ -9,7 +9,7 @@ class Sampler
 {
 public:
     // Perform a single sampling according to the pattern.
-    // Overrides the results to measurements_vector.
+    // Append the results to measurements_vector.
     // If the size of measurements_vector is less than in GetRequiredSize, resize the array.
     virtual void Sample(MemoryWrapper& memory, std::vector<Measurement>& measurements_vector) = 0;
 
