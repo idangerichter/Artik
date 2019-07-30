@@ -6,7 +6,7 @@ class FileWrapper
 {
 public:
   // Construct a file from the given filename
-  FileWrapper(const std::string& filename);
+  explicit FileWrapper(const std::string& filename);
 
   FileWrapper(FileWrapper&& file);
 

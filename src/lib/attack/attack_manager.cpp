@@ -13,9 +13,9 @@ AttackManager::AttackManager(MemoryWrapper&& memory_wrapper,
 }
 
 AttackManager::AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type, std::shared_ptr<Sampler> sampler) :
-  sampler_(sampler),
   attack_type_(attack_type),
-  memory_wrapper_(std::make_unique<MemoryWrapper>(std::move(memory_wrapper)))
+  memory_wrapper_(std::make_unique<MemoryWrapper>(std::move(memory_wrapper))),
+  sampler_(sampler)
 {
 }
 

@@ -66,13 +66,13 @@ int32_t GetSetsCount(const CPUID& cid)
 } // namespace
 
 CacheInfo::CacheInfo(const CPUID& c)
-: type(GetType(c)),
-  level(GetLevel(c)),
-  fully_associative(GetFullyAssociative(c)),
-  line_size(GetLineSize(c)),
-  cache_associativity(GetCacheAssociativity(c)),
-  sets_count(GetSetsCount(c)),
-  total_cache_size(line_size * cache_associativity * sets_count)
+: type_(GetType(c)),
+  level_(GetLevel(c)),
+  fully_associative_(GetFullyAssociative(c)),
+  line_size_(GetLineSize(c)),
+  cache_associativity_(GetCacheAssociativity(c)),
+  sets_count_(GetSetsCount(c)),
+  total_cache_size_(line_size_ * cache_associativity_ * sets_count_)
 {
 }
 
@@ -84,7 +84,7 @@ std::vector<CacheInfo> CacheInfo::GetAll()
         CPUID command(CPUID_CACHE_COMMAND, i);
         CacheInfo cache_info(command);
 
-        if (cache_info.type == CacheType::UNDEFINED)
+        if (cache_info.type_ == CacheType::UNDEFINED)
         {
             break;
         }
@@ -96,13 +96,13 @@ std::vector<CacheInfo> CacheInfo::GetAll()
 
 std::ostream& operator<<(std::ostream& stream, const CacheInfo& cacheInfo)
 {
-    stream << "cache type                           = " << cacheInfo.type << std::endl;
-    stream << "cache level                          = " << cacheInfo.level << std::endl;
-    stream << "fully associative cache              = " << cacheInfo.fully_associative << std::endl;
-    stream << "system coherency line size           = " << cacheInfo.line_size << std::endl;
-    stream << "ways of associativity                = " << cacheInfo.cache_associativity << std::endl;
-    stream << "number of sets                       = " << cacheInfo.sets_count << std::endl;
-    stream << "total cache size                     = " << cacheInfo.total_cache_size << std::endl;
+    stream << "cache type                           = " << cacheInfo.type_ << std::endl;
+    stream << "cache level                          = " << cacheInfo.level_ << std::endl;
+    stream << "fully associative cache              = " << cacheInfo.fully_associative_ << std::endl;
+    stream << "system coherency line size           = " << cacheInfo.line_size_ << std::endl;
+    stream << "ways of associativity                = " << cacheInfo.cache_associativity_ << std::endl;
+    stream << "number of sets                       = " << cacheInfo.sets_count_ << std::endl;
+    stream << "total cache size                     = " << cacheInfo.total_cache_size_ << std::endl;
     return stream;
 }
 

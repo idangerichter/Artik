@@ -29,7 +29,7 @@ public:
     // Create a memory wrapper from already allocated array.
     // Note: The array will not be freed!! 
     explicit MemoryWrapper(void* array, size_t size);
-    explicit MemoryWrapper(MemoryWrapper&& mem_wrapper);
+    MemoryWrapper(MemoryWrapper&& mem_wrapper);
 
     Byte& operator[](size_t index);
     const Byte& operator[](size_t index) const;

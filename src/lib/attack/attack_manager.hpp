@@ -13,7 +13,7 @@ struct AttackResult
 };
 
 // This class is managing the attack
-// It is incharge on giving calibration method
+// It is in charge of giving calibration method
 // and performing a cache attack, saving the results to attack_results_
 //
 // AttackManager has two modes, he either calibrate and generate
@@ -37,8 +37,8 @@ public:
   void Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results);
 
 private:
-  std::unique_ptr<MemoryWrapper> memory_wrapper_;
   AttackType attack_type_;
+  std::unique_ptr<MemoryWrapper> memory_wrapper_;
   std::shared_ptr<Sampler> sampler_;
   std::shared_ptr<ScoreProvider> score_provider_;
 };

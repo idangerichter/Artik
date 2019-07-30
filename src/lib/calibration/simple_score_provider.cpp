@@ -13,6 +13,7 @@ double SimpleScoreProvider::Normalize(Measurement measurement) const
     return measurement.time >= threshold_ ? 0.0 : 1.0;
   case AttackType::PrimeProbe:
     return measurement.time >= threshold_ ? 1.0 : 0.0;
+  default:
+    return 1;
   }
-  return 0;
 }
