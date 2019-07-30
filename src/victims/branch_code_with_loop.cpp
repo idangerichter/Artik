@@ -12,6 +12,7 @@ void option0()
 
 void option1()
 {
+    asm volatile("NOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\n");
     std::cout << "Option 1 was choosen, looping" << std::endl;
     while (true)
     {

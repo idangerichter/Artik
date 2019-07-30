@@ -2,7 +2,7 @@
 #include "simple_score_provider.cpp"
 #include <iostream>
 
-constexpr double THRESHOLD = 220;
+constexpr double THRESHOLD = 160;
 
 std::unique_ptr<ScoreProvider> Calibration::Calibrate(const std::vector<Measurement>& measurements, AttackType type)
 {

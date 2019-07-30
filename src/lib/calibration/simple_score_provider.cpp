@@ -1,4 +1,5 @@
 #include "simple_score_provider.hpp"
+#include <stdexcept>
 
 SimpleScoreProvider::SimpleScoreProvider(AttackType type, double threshold) :
   attack_type_(type),
@@ -14,6 +15,6 @@ double SimpleScoreProvider::Normalize(Measurement measurement) const
   case AttackType::PrimeProbe:
     return measurement.time >= threshold_ ? 1.0 : 0.0;
   default:
-    return 1;
+    throw new std::range_error("Attack type should be FlushReload or PrimeProbe");
   }
 }

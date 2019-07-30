@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
-set(CMAKE_CXX_COMPILER /usr/bin/gcc)
+set(CMAKE_C_COMPILER /usr/bin/gcc)
 project(CryptoWorkshop CXX)
 
 # C++ settings
