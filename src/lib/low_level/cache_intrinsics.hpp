@@ -25,7 +25,7 @@ __attribute__((always_inline)) int32_t ProbeTiming(void* p)
 // Access the address that was given.
 __attribute__((always_inline)) void MemoryAccess(void* p)
 {
-  int tmp;
+  int tmp = 0;
   asm volatile("mov (%1), %0" : "+r"(tmp) : "r"(p) :);
 }
 

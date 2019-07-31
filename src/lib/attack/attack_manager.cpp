@@ -35,8 +35,6 @@ void AttackManager::Attack(std::vector<Measurement>& measurements, std::vector<A
 
   sampler_->Sample(memory_wrapper_, measurements);
 
-  results.reserve(results.size() + sampler_->GetRequiredSize());
-
   for (const Measurement& measurement : measurements)
   {
     results.push_back(AttackResult{ measurement.index, score_provider_->Normalize(measurement) });

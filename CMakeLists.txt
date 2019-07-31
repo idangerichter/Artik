@@ -18,7 +18,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 file(GLOB_RECURSE lib_sources src/lib/*.* src/lib/*/.*.)
 add_library(Lib ${lib_sources})
 set_target_properties(Lib PROPERTIES LINKER_LANGUAGE CXX)
-target_compile_options(Lib PRIVATE -Wall -Wextra -Wno-attributes)
+target_compile_options(Lib PRIVATE -Wall -Wextra -Wno-attributes -Wno-unused-parameter)
 
 
 # Playground

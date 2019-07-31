@@ -26,7 +26,7 @@ public:
                 std::unique_ptr<Sampler> sampler,
                 std::shared_ptr<ScoreProvider> score_provider);
 
-  AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type,std::unique_ptr<Sampler> sampler);
+  AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type, std::unique_ptr<Sampler> sampler);
 
   AttackManager(const AttackManager& attack) = delete;
   AttackManager(AttackManager&& attack) = default;
