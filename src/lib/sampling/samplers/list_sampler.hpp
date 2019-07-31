@@ -6,7 +6,7 @@
 class ListSampler : public Sampler
 {
 public:
-  explicit ListSampler(const std::vector<size_t>& indices,
+  explicit ListSampler(std::vector<size_t> indices,
                        size_t sample_measure_delay,
                        size_t between_items_delay,
                        std::shared_ptr<SamplerPrimitive> sampler_primitive);

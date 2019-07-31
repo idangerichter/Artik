@@ -1,11 +1,12 @@
 #include "list_sampler.hpp"
 #include <thread>
+#include <utility>
 
-ListSampler::ListSampler(const std::vector<size_t>& indices,
+ListSampler::ListSampler(std::vector<size_t>  indices,
                          size_t sample_measure_delay,
                          size_t between_items_delay,
                          std::shared_ptr<SamplerPrimitive> sampler_primitive) :
-indices_(indices),
+indices_(std::move(indices)),
 sample_measure_delay_(sample_measure_delay),
 between_items_delay_(between_items_delay),
 sampler_primitive_(std::move(sampler_primitive))

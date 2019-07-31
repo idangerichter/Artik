@@ -23,12 +23,14 @@ class AttackManager
 public:
   AttackManager(MemoryWrapper&& memory_wrapper,
                 AttackType attack_type,
-                std::shared_ptr<Sampler> sampler,
+                std::unique_ptr<Sampler> sampler,
                 std::shared_ptr<ScoreProvider> score_provider);
 
-  AttackManager(MemoryWrapper&& memory_wrapper,
-                AttackType attack_type,
-                std::shared_ptr<Sampler> sampler);
+  AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type, std::unique_ptr<Sampler> sampler);
+
+  AttackManager(const AttackManager& attack) = delete;
+  AttackManager(AttackManager&& attack) = default;
+  AttackManager& operator=(const AttackManager& attack) = delete;
 
   // Generate score_provider_ using memory_wrapper_ and sampler_
   void Calibrate();
@@ -38,7 +40,7 @@ public:
 
 private:
   AttackType attack_type_;
-  std::unique_ptr<MemoryWrapper> memory_wrapper_;
-  std::shared_ptr<Sampler> sampler_;
+  MemoryWrapper memory_wrapper_;
+  std::unique_ptr<Sampler> sampler_;
   std::shared_ptr<ScoreProvider> score_provider_;
 };
