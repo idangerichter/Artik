@@ -11,11 +11,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
 set(CMAKE_C_COMPILER /usr/bin/gcc)
 
+# static linking - for computer lab compatability
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
+
 # Cmake output settings
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 
 # Library module
 file(GLOB_RECURSE lib_sources src/lib/*.* src/lib/*/.*.)
