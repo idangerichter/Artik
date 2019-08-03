@@ -1,19 +1,18 @@
 #include "../../lib/sampling/samplers/simple_sampler.hpp"
 #include "../testutils/testutils_sample_primitives.inl"
 
-
 TEST(SimpleSampler, basic_functionality)
 {
-  // consts
+  // Consts
   const auto INPUT_INDEX = 371;
   const auto MEASUREMENT = Measurement{ 374, 377 };
-  // dependencies
+  // Dependencies
   auto primitive = testutils::Primitive();
   MemoryWrapper wrapper(0);
   std::vector<Measurement> measurements;
   // Expectations
-  EXPECT_CALL(*primitive.get(), Prepare(_, _)).Times(1).WillOnce(Return());
-  EXPECT_CALL(*primitive.get(), Sample(_, _)).Times(1).WillOnce(Return(MEASUREMENT));
+  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), INPUT_INDEX)).Times(1).WillOnce(Return());
+  EXPECT_CALL(*primitive, Sample(Ref(wrapper), INPUT_INDEX)).Times(1).WillOnce(Return(MEASUREMENT));
   // Code
   SimpleSampler sampler(INPUT_INDEX, 0, primitive);
   sampler.Sample(wrapper, measurements);
@@ -26,18 +25,18 @@ TEST(SimpleSampler, basic_functionality)
 
 TEST(SimpleSampler, multiple_samples)
 {
-  // consts
+  // Consts
   const auto NUM_ITERATIONS = 77;
   const auto BASE_TIME = 300;
   const size_t BASE_INDEX = 20;
-  // dependencies
+  // Dependencies
   auto primitive = testutils::Primitive();
   MemoryWrapper wrapper(0);
   std::vector<Measurement> measurements;
   int mock_index = 0;
   // Expectations
-  EXPECT_CALL(*primitive.get(), Prepare(_, _)).Times(NUM_ITERATIONS).WillRepeatedly(Return());
-  EXPECT_CALL(*primitive.get(), Sample(_, _))
+  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _)).Times(NUM_ITERATIONS).WillRepeatedly(Return());
+  EXPECT_CALL(*primitive, Sample(Ref(wrapper), _))
     .Times(NUM_ITERATIONS)
     .WillRepeatedly(Invoke([&mock_index](auto& wrapper, auto index) mutable -> Measurement {
       auto res = Measurement{ BASE_INDEX + mock_index, BASE_TIME + mock_index };
