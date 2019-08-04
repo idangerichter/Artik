@@ -1,5 +1,6 @@
 #include "../../lib/sampling/samplers/simple_sampler.hpp"
 #include "../testutils/testutils_sample_primitives.inl"
+#include <chrono>
 
 TEST(SimpleSampler, basic_functionality)
 {
@@ -56,4 +57,25 @@ TEST(SimpleSampler, multiple_samples)
       ASSERT_TRUE(measurements[j] == (Measurement{ BASE_INDEX + j, BASE_TIME + j }));
     }
   }
+}
+
+TEST(SimpleSampler, delay)
+{
+  // Consts
+  const auto DELAY_TIME = 20000000; // in ns
+  // Dependencies
+  auto primitive = testutils::Primitive();
+  MemoryWrapper wrapper(0);
+  std::vector<Measurement> measurements;
+  // Expectations
+  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _)).WillOnce(Return());
+  EXPECT_CALL(*primitive, Sample(Ref(wrapper), _)).WillOnce(Return(Measurement{}));
+  // Code
+  SimpleSampler sampler(0, DELAY_TIME, primitive);
+  auto start_time = std::chrono::high_resolution_clock::now();
+  sampler.Sample(wrapper, measurements);
+  auto end_time = std::chrono::high_resolution_clock::now();
+  // Assertions
+  auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+  ASSERT_GE(duration, DELAY_TIME) << "Sampling should take more time then the delay";
 }
