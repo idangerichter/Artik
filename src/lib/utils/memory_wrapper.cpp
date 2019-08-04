@@ -1,11 +1,7 @@
 #include "memory_wrapper.hpp"
 #include "../low_level/cache_intrinsics.hpp"
-#include <fcntl.h>
 #include <stdexcept>
 #include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 MemoryWrapper::MemoryWrapper(size_t size):
     memory_type_(MemoryType::ALLOCATED),
