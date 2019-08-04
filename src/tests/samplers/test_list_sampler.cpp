@@ -5,7 +5,6 @@
 
 using time_stamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
 
-
 TEST(ListSampler, basic_functionality)
 {
   // Consts
@@ -128,7 +127,7 @@ TEST(ListSampler, between_items_delay)
   // Code
   ListSampler sampler(INDICES, 0, DELAY_TIME, primitive);
   sampler.Sample(wrapper, measurements);
-  // Expectations
+  // Assertions
   ASSERT_EQ(timestamps.size(), INDICES.size());
   for (size_t i = 1; i < INDICES.size(); i++) {
     auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(timestamps[i] - timestamps[i-1]).count();

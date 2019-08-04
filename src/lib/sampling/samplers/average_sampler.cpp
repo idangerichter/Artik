@@ -26,6 +26,11 @@ void AverageSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& mea
     temp_aggregating_measurements_[i] = temp_measurements_[i];
   }
 
+  if (between_rounds_delay_ != 0)
+  {
+    std::this_thread::sleep_for(std::chrono::nanoseconds(between_rounds_delay_));
+  }
+
   // Run the rest
   for (size_t round = 1; round < count_; ++round)
   {
