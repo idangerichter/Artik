@@ -1,5 +1,7 @@
 #pragma once
-#include <string>
+#include "../includes.hpp"
+#include "file_wrapper.hpp"
+#include <memory>
 
 enum class MemoryType
 {
@@ -8,74 +10,53 @@ enum class MemoryType
     PRE_ALLOCATED
 };
 
-/**
- * A generic wrapper for a memory object that can measure time, flush memory, evict so on and so forth.
- */
+
+//  A generic wrapper for a memory object that can measure time, 
+//  flush memory, evict so on and so forth. 
 class MemoryWrapper
 {
-    public:
-    /**
-     * Initiate an memory wrapper from a file.
-     * Loads the array from file, using mmap.
-     * @param filename A valid filename
-     * @param offset The offset from the beginning of the file to load from. Default: 0
-     * @param size How many bytes to read. Default: 0 - all.
-     */
-    explicit MemoryWrapper(const std::string& filename, std::size_t offset = 0, std::size_t size = 0);
-    /**
-     * Initiate an memory wrapper using an allocated array with the given size
-     * @param size The size of the array
-     */
-    explicit MemoryWrapper(std::size_t size);
+public:
 
-    /**
-     * Create an memory wrapper from already allocated array.
-     * Note: The array will not be freed
-     * @param array the array
-     * @param size The size of the array
-     */
-    MemoryWrapper(void* array, std::size_t size);
-    /**
-     * Free all used memory
-     */
-    ~MemoryWrapper();
+    // Initiate an memory wrapper from a file.
+    //Loads size bytes to the array from file, starting from offset.
+    explicit MemoryWrapper(const std::string& filename, size_t offset = 0, size_t size = 0);
+    
+    MemoryWrapper(const MemoryWrapper& mem_wrapper) = delete;
 
-    int8_t& operator[](std::size_t index);
-    const int8_t& operator[](std::size_t index) const;
+    // Initiate an memory wrapper using an allocated array with the given size
+    explicit MemoryWrapper(size_t size);
 
-    /**
-     * Measure the amount of clock cycles it takes to get the value at index {index}
-     * @param index a valid index
-     */
-    int32_t Measure(std::size_t index) const;
-    /**
-     * Flush the given index.
-     * @param index a valid index
-     */
-    void Flush(std::size_t index) const;
+    // Create a memory wrapper from already allocated array.
+    // Note: The array will not be freed!! 
+    explicit MemoryWrapper(void* array, size_t size);
+    MemoryWrapper(MemoryWrapper&& mem_wrapper);
 
-    /**
-     * Flush the whole array from memory
-     */
+    Byte& operator[](size_t index);
+    const Byte& operator[](size_t index) const;
+    MemoryWrapper& operator= (const MemoryWrapper& mem_wrapper) = delete;
+
+    // Measure the amount of clock cycles it takes to get the value at index 
+    int32_t Measure(size_t index) const;
+    
+    // Flush the given index.
+    void Flush(size_t index) const;
+
+    // Flush the whole array from memory
     void FlushAll() const;
 
-    /**
-     * Access the array at the given index
-     * @param index a valid index
-     */
-    void Access(std::size_t index) const;
+    // Access the array at the given index
+    void Access(size_t index) const;
 
-    /**
-     * Load the array to the cache (hopefully)
-     */
+    // Load the array to the cache
     void LoadToCache() const;
 
-    /**
-     * The type of the memory
-     */
-    const MemoryType memory_type;
-    std::size_t size;
+    // The type of the memory
+    const MemoryType memory_type_;
+    // the memory size
+    size_t size_;
 
-    private:
-    int8_t* array;
+private:
+    explicit MemoryWrapper(const FileWrapper&& file, size_t offset, size_t size);
+
+    std::unique_ptr<Byte[], std::function<void(Byte*)>> array_;
 };

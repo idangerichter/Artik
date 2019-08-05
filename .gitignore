@@ -38,3 +38,7 @@ Thumbs.db
 
 # IDE stuff#
 .vscode
+.idea
+build
+build/Makefile
+cmake-build-debug

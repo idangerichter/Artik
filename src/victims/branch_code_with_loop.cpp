@@ -3,7 +3,7 @@
 
 void option0()
 {
-    std::cout << "Option 0 was choosen, looping" << std::endl;
+    std::cout << "Option 0 was chosen, looping" << std::endl;
     while (true)
     {
         sched_yield();
@@ -12,7 +12,13 @@ void option0()
 
 void option1()
 {
-    std::cout << "Option 1 was choosen, looping" << std::endl;
+  asm volatile("NOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\n");
+  asm volatile("NOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\n");
+  asm volatile("NOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\n");
+  asm volatile("NOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\n");
+  asm volatile("NOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\nNOP\n");
+
+  std::cout << "Option 1 was chosen, looping" << std::endl;
     while (true)
     {
         sched_yield();

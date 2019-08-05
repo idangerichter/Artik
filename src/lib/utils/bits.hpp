@@ -1,10 +1,10 @@
 #pragma once
 #include <cassert>
-/**
- * create bitmask for {from, from+1, ..., to}
- * if from == to the it will mask {from}
- */
-static constexpr uint64_t Bitmask(unsigned int const from, unsigned int const to)
+
+
+//  Create bitmask for {from, from+1, ..., to}
+//  if from = to, it will mask {from} 
+static constexpr uint64_t Bitmask(const unsigned int from, const unsigned int to)
 {
     if (from == to)
     {
@@ -16,18 +16,15 @@ static constexpr uint64_t Bitmask(unsigned int const from, unsigned int const to
     }
 }
 
-/**
- * Extract the bits {from, from+1, ..., to} from field.
- */
-static uint64_t ExtractBits(uint64_t field, unsigned int const from, unsigned int const to)
+
+// Extract the bits {from, from+1, ..., to} from field.
+uint64_t ExtractBits(uint64_t field,  const unsigned int from, const unsigned int to)
 {
     return (field & Bitmask(from, to)) >> from;
 }
 
-/**
- * Extract the bit {bit} from the field
- */
-static bool ExtractBit(uint64_t field, unsigned int const bit)
+// Extract the bit {bit} from the field 
+bool ExtractBit(uint64_t field, unsigned int const bit)
 {
     return (field & (static_cast<uint64_t>(1) << bit)) != 0;
 }
