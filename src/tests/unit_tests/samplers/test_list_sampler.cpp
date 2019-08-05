@@ -95,18 +95,20 @@ TEST(ListSampler, sample_measure_delay)
     ASSERT_TRUE(start_times.find(index) == start_times.end());
     start_times[index] = std::chrono::high_resolution_clock::now();
   }));
-  EXPECT_CALL(*primitive, Sample(Ref(wrapper), _)).Times(INDICES.size()).WillRepeatedly(Invoke([&start_times](auto& mem, auto index) -> Measurement {
-    auto end_time = std::chrono::high_resolution_clock::now();
-    EXPECT_TRUE(start_times.find(index) != start_times.end()) << "Prepare should be called before Sample";
-    auto start_time = start_times.at(index);
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-    EXPECT_GE(duration, DELAY_TIME) << "Sampling each round should take more time then the delay";
-    return Measurement{};
-  }));
+  EXPECT_CALL(*primitive, Sample(Ref(wrapper), _))
+    .Times(INDICES.size())
+    .WillRepeatedly(Invoke([DELAY_TIME, &start_times](auto& mem, auto index) -> Measurement {
+      auto end_time = std::chrono::high_resolution_clock::now();
+      EXPECT_TRUE(start_times.find(index) != start_times.end())
+        << "Prepare should be called before Sample";
+      auto start_time = start_times.at(index);
+      auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+      EXPECT_GE(duration, DELAY_TIME) << "Sampling each round should take more time then the delay";
+      return Measurement{};
+    }));
   // Code
   ListSampler sampler(INDICES, DELAY_TIME, 0, primitive);
   sampler.Sample(wrapper, measurements);
-
 }
 
 TEST(ListSampler, between_items_delay)
@@ -129,8 +131,10 @@ TEST(ListSampler, between_items_delay)
   sampler.Sample(wrapper, measurements);
   // Assertions
   ASSERT_EQ(timestamps.size(), INDICES.size());
-  for (size_t i = 1; i < INDICES.size(); i++) {
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(timestamps[i] - timestamps[i-1]).count();
+  for (size_t i = 1; i < INDICES.size(); i++)
+  {
+    auto duration =
+      std::chrono::duration_cast<std::chrono::nanoseconds>(timestamps[i] - timestamps[i - 1]).count();
     ASSERT_GE(duration, DELAY_TIME) << "Time between items should be at least the given delay";
   }
 }
