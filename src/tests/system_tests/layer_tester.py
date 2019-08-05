@@ -10,7 +10,7 @@ LAYERS = ['0', '1', '2', '3', '3s', '4', '5']
 
 
 def start_victim(path: str, args: List[str]) -> subprocess.Popen:
-    return subprocess.Popen([path, *args])
+    return subprocess.Popen([path, *args], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
 def start_tester(path: str, args: List[str]) -> subprocess.Popen:
