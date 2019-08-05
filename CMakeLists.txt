@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 project(CryptoWorkshop CXX)
 
+# Cmake settings
+set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 # C++ settings
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -23,6 +26,14 @@ add_library(Lib ${lib_sources})
 set_target_properties(Lib PROPERTIES LINKER_LANGUAGE CXX)
 target_compile_options(Lib PRIVATE -Wall -Wextra -Wno-attributes -Wno-unused-parameter)
 
+# Testing
+include(cmake/googletest.cmake)
+fetch_googletest(
+        ${PROJECT_SOURCE_DIR}/cmake
+        ${PROJECT_BINARY_DIR}/googletest
+)
+enable_testing()
+add_subdirectory(src/tests)
 
 # Playground
 add_subdirectory(src/playground)

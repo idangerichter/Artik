@@ -20,7 +20,7 @@ size_t GetFileSize(int fd)
   off_t size = lseek(fd, 0, SEEK_END);
   lseek(fd, 0, SEEK_SET);
 
-  return (size_t) size;
+  return static_cast<size_t>(size);
 }
 } // namespace
 
