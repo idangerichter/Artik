@@ -1,4 +1,4 @@
-#include "../../lib/utils/memory_wrapper.hpp"
+#include "../../../lib/utils/memory_wrapper.hpp"
 #include <fstream>
 #include <gtest/gtest.h>
 

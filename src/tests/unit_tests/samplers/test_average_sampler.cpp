@@ -1,7 +1,7 @@
-#include "../../lib/sampling/samplers/average_sampler.hpp"
-#include "../../lib/sampling/samplers/simple_sampler.hpp"
+#include "../../../lib/sampling/samplers/average_sampler.hpp"
+#include "../../../lib/sampling/samplers/simple_sampler.hpp"
 
-#include "../testutils/testutils_sample_primitives.inl"
+#include "../../testutils/testutils_sample_primitives.inl"
 #include <chrono>
 
 using time_stamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;

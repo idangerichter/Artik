@@ -1,5 +1,5 @@
-#include "../../lib/sampling/samplers/list_sampler.hpp"
-#include "../testutils/testutils_sample_primitives.inl"
+#include "../../../lib/sampling/samplers/list_sampler.hpp"
+#include "../../testutils/testutils_sample_primitives.inl"
 #include <chrono>
 #include <map>
 
