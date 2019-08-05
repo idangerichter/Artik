@@ -5,8 +5,9 @@ AverageSampler::AverageSampler(std::unique_ptr<Sampler> sampler, size_t count, s
   sampler_(std::move(sampler)),
   between_rounds_delay_(between_rounds_delay),
   count_(count),
-  temp_measurements_(sampler_->GetRequiredSize()),
-  temp_aggregating_measurements_(sampler_->GetRequiredSize())
+  data_size_(sampler_->GetRequiredSize()),
+  temp_measurements_(data_size_),
+  temp_aggregating_measurements_(data_size_)
 {
 }
 
@@ -16,16 +17,24 @@ size_t AverageSampler::GetRequiredSize() const
 }
 void AverageSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& measurements_vector)
 {
-  size_t size = GetRequiredSize();
+  // Run once to get right indices
+  temp_measurements_.clear();
+  sampler_->Sample(memory, temp_measurements_);
 
-  for (size_t i = 0; i < count_; ++i)
+  for (size_t i = 0; i < data_size_; ++i)
+  {
+    temp_aggregating_measurements_[i] = temp_measurements_[i];
+  }
+
+  // Run the rest
+  for (size_t round = 1; round < count_; ++round)
   {
     temp_measurements_.clear();
     sampler_->Sample(memory, temp_measurements_);
 
-    for (size_t j = 0; j < size; ++j)
+    for (size_t i = 0; i < data_size_; ++i)
     {
-      temp_aggregating_measurements_[j].time += temp_measurements_[j].time;
+      temp_aggregating_measurements_[i].time += temp_measurements_[i].time;
     }
 
     if (between_rounds_delay_ != 0)
@@ -34,8 +43,9 @@ void AverageSampler::Sample(MemoryWrapper& memory, std::vector<Measurement>& mea
     }
   }
 
-  for (size_t i = 0; i < size; i++)
+  for (auto& measurement : temp_aggregating_measurements_)
   {
-    measurements_vector.push_back(Measurement{ i, static_cast<int32_t>(temp_aggregating_measurements_[i].time / count_) });
+    measurement.time /= count_;
+    measurements_vector.push_back(measurement);
   }
 }
