@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 # see https://public.kitware.com/pipermail/cmake/2009-November/033133.html
 if (EXISTS /usr/local/bin/g++-8.3.0)
     set(CMAKE_CXX_COMPILER /usr/local/bin/g++-8.3.0)
-    set(CMAKE_C_COMPILER /usr/local/bin/gcc++-8.3.0)
+    set(CMAKE_C_COMPILER /usr/local/bin/gcc-8.3.0)
 else ()
     set(CMAKE_CXX_COMPILER /usr/bin/g++)
     set(CMAKE_C_COMPILER /usr/bin/gcc)

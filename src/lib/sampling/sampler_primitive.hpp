@@ -5,7 +5,7 @@
 #include <cstddef>
 
 
-// Responsible for accurately measuring the time to access memory while handling preperations and so on.
+// Responsible for accurately measuring the time to access memory while handling preparations and so on.
 // For example:
 //      Flush+Reload - The FlushReloadSampler flushes the given index in Prepare and access in Sample.
 class SamplerPrimitive

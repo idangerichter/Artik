@@ -5,10 +5,11 @@
 #include "layer_3_simple_sampler.hpp"
 #include "layer_4_average_sampler.hpp"
 #include "layer_5_attack_manager.hpp"
+#include "layer_5_attack_manager_without_average.hpp"
 #include <iostream>
-#include <map>
 #include <stdexcept>
 
+constexpr auto SLEEP = 100000; // 0.0001s
 
 std::unique_ptr<Layer>
 GetLayer(const std::string& name, MemoryWrapper&& memory_wrapper, size_t first_index, size_t second_index)
@@ -41,6 +42,11 @@ GetLayer(const std::string& name, MemoryWrapper&& memory_wrapper, size_t first_i
   {
     return std::make_unique<LayerAttackManager>(first_index, second_index, std::move(memory_wrapper));
   }
+  else if (name == "5s")
+  {
+    return std::make_unique<LayerAttackManagerWithoutAverage>(first_index, second_index,
+                                                              std::move(memory_wrapper));
+  }
 
   throw std::domain_error("Name is invalid");
 }
@@ -66,14 +72,14 @@ int main(int argc, char* argv[])
   }
 
   auto layer = GetLayer(layer_name, MemoryWrapper(path), addr0, addr1);
-  for (size_t i = 0; i < rounds; i++) {
+  for (size_t i = 0; i < rounds; i++)
+  {
     auto measurements = layer->Sample();
-
     std::cout << measurements[0].time << " " << measurements[1].time << std::endl;
 
     layer->Finalize();
 
-    Layer::Sleep(100000000); // 0.1s
+    Layer::Sleep(SLEEP);
   }
   return 0;
 }
