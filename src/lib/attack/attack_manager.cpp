@@ -21,30 +21,12 @@ AttackManager::AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_t
 {
 }
 
-void AttackManager::Calibrate(size_t accessed_sample_rounds,
-                              size_t flushed_sample_rounds,
+void AttackManager::Calibrate( size_t flushed_sample_rounds,
                               size_t action_sample_delay,
                               size_t between_samples_delay)
 {
-  std::vector<Measurement> accessed_measurements;
-  std::vector<Measurement> flushed_measurements;
-
-  accessed_measurements.reserve(accessed_sample_rounds);
-  flushed_measurements.reserve(flushed_sample_rounds);
-  for (size_t i = 0; i < accessed_sample_rounds; i++)
-  {
-    memory_wrapper_.Access(0);
-    if (action_sample_delay != 0)
-    {
-      std::this_thread::sleep_for(std::chrono::nanoseconds(action_sample_delay));
-    }
-    accessed_measurements.push_back(Measurement{ 0, memory_wrapper_.Measure(0) });
-
-    if (between_samples_delay != 0)
-    {
-      std::this_thread::sleep_for(std::chrono::nanoseconds(between_samples_delay));
-    }
-  }
+  std::vector<Measurement> measurements;
+  measurements.reserve(flushed_sample_rounds);
 
   for (size_t i = 0; i < flushed_sample_rounds; i++)
   {
@@ -53,7 +35,7 @@ void AttackManager::Calibrate(size_t accessed_sample_rounds,
     {
       std::this_thread::sleep_for(std::chrono::nanoseconds(action_sample_delay));
     }
-    flushed_measurements.push_back(Measurement{ 0, memory_wrapper_.Measure(0) });
+    measurements.push_back(Measurement{ 0, memory_wrapper_.Measure(0) });
 
     if (between_samples_delay != 0)
     {
@@ -61,8 +43,7 @@ void AttackManager::Calibrate(size_t accessed_sample_rounds,
     }
   }
 
-  std::vector<Measurement> test;
-  score_provider_ = Calibration::Calibrate(accessed_measurements, flushed_measurements, attack_type_);
+  score_provider_ = Calibration::Calibrate(measurements, attack_type_);
 }
 void AttackManager::Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results)
 {
