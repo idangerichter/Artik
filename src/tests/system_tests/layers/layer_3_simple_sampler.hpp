@@ -15,5 +15,4 @@ private:
   MemoryWrapper memory_wrapper_;
   SimpleSampler first_sampler_;
   SimpleSampler second_sampler_;
-
 };

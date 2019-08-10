@@ -19,5 +19,4 @@ private:
   // Due to performance issues, we allocate the vector once.
   std::vector<Measurement> temp_measurements_;
   std::vector<Measurement> temp_aggregating_measurements_;
-
 };

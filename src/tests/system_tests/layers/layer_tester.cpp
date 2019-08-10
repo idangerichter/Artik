@@ -16,7 +16,9 @@ GetLayer(const std::string& name, MemoryWrapper&& memory_wrapper, size_t first_i
 {
   if (name == "0")
   {
-    return std::make_unique<LayerCacheIntrinsics>(first_index, second_index, std::move(memory_wrapper));
+    return std::make_unique<LayerCacheIntrinsics>(first_index,
+                                                  second_index,
+                                                  std::move(memory_wrapper));
   }
   else if (name == "1")
   {
@@ -24,7 +26,9 @@ GetLayer(const std::string& name, MemoryWrapper&& memory_wrapper, size_t first_i
   }
   else if (name == "2")
   {
-    return std::make_unique<LayerSamplerPrimitive>(first_index, second_index, std::move(memory_wrapper));
+    return std::make_unique<LayerSamplerPrimitive>(first_index,
+                                                   second_index,
+                                                   std::move(memory_wrapper));
   }
   else if (name == "3")
   {
@@ -36,7 +40,9 @@ GetLayer(const std::string& name, MemoryWrapper&& memory_wrapper, size_t first_i
   }
   else if (name == "4")
   {
-    return std::make_unique<LayerAverageSampler>(first_index, second_index, std::move(memory_wrapper));
+    return std::make_unique<LayerAverageSampler>(first_index,
+                                                 second_index,
+                                                 std::move(memory_wrapper));
   }
   else if (name == "5")
   {
@@ -44,7 +50,8 @@ GetLayer(const std::string& name, MemoryWrapper&& memory_wrapper, size_t first_i
   }
   else if (name == "5s")
   {
-    return std::make_unique<LayerAttackManagerWithoutAverage>(first_index, second_index,
+    return std::make_unique<LayerAttackManagerWithoutAverage>(first_index,
+                                                              second_index,
                                                               std::move(memory_wrapper));
   }
 

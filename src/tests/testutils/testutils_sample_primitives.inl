@@ -19,11 +19,14 @@ public:
   MOCK_CONST_METHOD2(Sample, Measurement(const MemoryWrapper&, size_t));
 };
 
-static std::shared_ptr<MockPrimitiveSampler> Primitive() {
+static std::shared_ptr<MockPrimitiveSampler> Primitive()
+{
   return std::make_shared<StrictMock<MockPrimitiveSampler>>();
 }
 static std::shared_ptr<MockPrimitiveSampler>
-PrimitiveFromValues(std::vector<Measurement> values, bool should_loop = true, bool should_overwrite_index = false)
+PrimitiveFromValues(std::vector<Measurement> values,
+                    bool should_loop = true,
+                    bool should_overwrite_index = false)
 {
   auto mock = std::make_shared<NiceMock<MockPrimitiveSampler>>();
   auto i = std::make_shared<int>(0);
@@ -33,7 +36,8 @@ PrimitiveFromValues(std::vector<Measurement> values, bool should_loop = true, bo
     {
       if (!should_loop)
       {
-        throw std::runtime_error("Used simple primitive mock and consumed all values");
+        throw std::runtime_error(
+          "Used simple primitive mock and consumed all values");
       }
       *i = 0;
     }
@@ -48,7 +52,8 @@ PrimitiveFromValues(std::vector<Measurement> values, bool should_loop = true, bo
 }
 
 static std::shared_ptr<MockPrimitiveSampler>
-PrimitiveFromRawValues(const std::initializer_list<int32_t>& values = {0}, bool should_loop = true)
+PrimitiveFromRawValues(const std::initializer_list<int32_t>& values = { 0 },
+                       bool should_loop = true)
 {
   std::vector<Measurement> measurements;
   for (const auto value : values)

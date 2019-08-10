@@ -14,14 +14,16 @@ AttackManager::AttackManager(MemoryWrapper&& memory_wrapper,
   score_provider_ = std::move(score_provider);
 }
 
-AttackManager::AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type, std::unique_ptr<Sampler> sampler) :
+AttackManager::AttackManager(MemoryWrapper&& memory_wrapper,
+                             AttackType attack_type,
+                             std::unique_ptr<Sampler> sampler) :
   attack_type_(attack_type),
   memory_wrapper_(std::move(memory_wrapper)),
   sampler_(std::move(sampler))
 {
 }
 
-void AttackManager::Calibrate( size_t flushed_sample_rounds,
+void AttackManager::Calibrate(size_t flushed_sample_rounds,
                               size_t action_sample_delay,
                               size_t between_samples_delay)
 {
@@ -45,7 +47,8 @@ void AttackManager::Calibrate( size_t flushed_sample_rounds,
 
   score_provider_ = Calibration::Calibrate(measurements, attack_type_);
 }
-void AttackManager::Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results)
+void AttackManager::Attack(std::vector<Measurement>& measurements,
+                           std::vector<AttackResult>& results)
 {
   if (!score_provider_)
   {
@@ -56,6 +59,7 @@ void AttackManager::Attack(std::vector<Measurement>& measurements, std::vector<A
 
   for (const Measurement& measurement : measurements)
   {
-    results.push_back(AttackResult{ measurement.index, score_provider_->Normalize(measurement) });
+    results.push_back(AttackResult{ measurement.index,
+                                    score_provider_->Normalize(measurement) });
   }
 }

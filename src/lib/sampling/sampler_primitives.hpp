@@ -14,12 +14,12 @@ class SimpleSamplerPrimitive : public SamplerPrimitive
 class FlushSamplerPrimitive : public SamplerPrimitive
 {
 public:
-    void Prepare(const MemoryWrapper& memory, size_t index) const override;
+  void Prepare(const MemoryWrapper& memory, size_t index) const override;
 };
 
 // Sampler primitive for Prime-Probe. Preparation is to access the given index.
 class LoadSamplerPrimitive : public SamplerPrimitive
 {
 public:
-    void Prepare(const MemoryWrapper& memory, size_t index) const override;
+  void Prepare(const MemoryWrapper& memory, size_t index) const override;
 };

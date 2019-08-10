@@ -20,7 +20,8 @@ TEST(SimpleSampler, basic_functionality)
   // Assertions
   ASSERT_EQ(sampler.GetRequiredSize(), 1)
     << "The required size of the SimpleSampler should be always 1";
-  ASSERT_EQ(measurements.size(), 1) << "The vector's size should be always 1 after sampling";
+  ASSERT_EQ(measurements.size(), 1)
+    << "The vector's size should be always 1 after sampling";
   ASSERT_TRUE(measurements[0] == MEASUREMENT);
 }
 
@@ -76,6 +77,8 @@ TEST(SimpleSampler, delay)
   sampler.Sample(wrapper, measurements);
   auto end_time = std::chrono::high_resolution_clock::now();
   // Assertions
-  auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-  ASSERT_GE(duration, DELAY_TIME) << "Sampling should take more time then the delay";
+  auto duration =
+    std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
+  ASSERT_GE(duration, DELAY_TIME)
+    << "Sampling should take more time then the delay";
 }

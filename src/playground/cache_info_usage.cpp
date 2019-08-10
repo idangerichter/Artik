@@ -3,13 +3,13 @@
 
 int main()
 {
-    std::vector<CacheInfo> caches = CacheInfo::GetAll();
-    int i = 0;
-    for (const CacheInfo& cacheInfo : caches)
-    {
-        std::cout << "Cache " << i << ":" << std::endl;
-        std::cout << cacheInfo << std::endl;
-        i++;
-    }
-    return 0;
+  std::vector<CacheInfo> caches = CacheInfo::GetAll();
+  int i = 0;
+  for (const CacheInfo& cacheInfo : caches)
+  {
+    std::cout << "Cache " << i << ":" << std::endl;
+    std::cout << cacheInfo << std::endl;
+    i++;
+  }
+  return 0;
 }

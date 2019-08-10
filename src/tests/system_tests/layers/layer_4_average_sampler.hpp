@@ -14,5 +14,4 @@ private:
   std::vector<Measurement> temp_results_;
   MemoryWrapper memory_wrapper_;
   AverageSampler sampler_;
-
 };

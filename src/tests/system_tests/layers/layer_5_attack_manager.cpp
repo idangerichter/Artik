@@ -3,7 +3,9 @@
 #include "../../../lib/sampling/samplers/average_sampler.hpp"
 #include "../../../lib/sampling/samplers/list_sampler.hpp"
 
-LayerAttackManager::LayerAttackManager(size_t first_index, size_t second_index, MemoryWrapper&& memory_wrapper) :
+LayerAttackManager::LayerAttackManager(size_t first_index,
+                                       size_t second_index,
+                                       MemoryWrapper&& memory_wrapper) :
   Layer(first_index, second_index, 5, "Attack manager"),
   temp_results_(),
   temp_attack_results_(),

@@ -1,6 +1,8 @@
 #include "layer_1_memory_wrapper.hpp"
 
-LayerMemoryWrapper::LayerMemoryWrapper(size_t first_index, size_t second_index, MemoryWrapper&& memory_wrapper) :
+LayerMemoryWrapper::LayerMemoryWrapper(size_t first_index,
+                                       size_t second_index,
+                                       MemoryWrapper&& memory_wrapper) :
   Layer(first_index, second_index, 1, "Memory wrapper"),
   memory_wrapper_(std::move(memory_wrapper)),
   temp_results_(2)

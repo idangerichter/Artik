@@ -2,10 +2,10 @@
 
 void FlushSamplerPrimitive::Prepare(const MemoryWrapper& memory, size_t index) const
 {
-    memory.Flush(index);
+  memory.Flush(index);
 }
 
 void LoadSamplerPrimitive::Prepare(const MemoryWrapper& memory, size_t index) const
 {
-    memory.Access(index);
+  memory.Access(index);
 }

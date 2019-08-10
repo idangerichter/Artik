@@ -10,7 +10,8 @@ class Sampler
 public:
   // Perform a single sampling according to the pattern.
   // Append the results to measurements_vector.
-  virtual void Sample(MemoryWrapper& memory, std::vector<Measurement>& measurements_vector) = 0;
+  virtual void Sample(MemoryWrapper& memory,
+                      std::vector<Measurement>& measurements_vector) = 0;
 
   // Returns the required size for the vector of the sampling.
   virtual size_t GetRequiredSize() const = 0;

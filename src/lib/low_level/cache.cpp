@@ -37,36 +37,36 @@ namespace
 {
 CacheType GetType(const CPUID& cid)
 {
-    return static_cast<CacheType>(ExtractBits(cid.eax, 0, 4));
+  return static_cast<CacheType>(ExtractBits(cid.eax, 0, 4));
 }
 
 int32_t GetLevel(const CPUID& cid)
 {
-    return ExtractBits(cid.eax, 5, 7);
+  return ExtractBits(cid.eax, 5, 7);
 }
 bool GetFullyAssociative(const CPUID& cid)
 {
-    return ExtractBit(cid.eax, 9);
+  return ExtractBit(cid.eax, 9);
 }
 
 int32_t GetLineSize(const CPUID& cid)
 {
-    return ExtractBits(cid.ebx, 0, 11) + 1;
+  return ExtractBits(cid.ebx, 0, 11) + 1;
 }
 
 int32_t GetCacheAssociativity(const CPUID& cid)
 {
-    return ExtractBits(cid.ebx, 22, 31) + 1;
+  return ExtractBits(cid.ebx, 22, 31) + 1;
 }
 
 int32_t GetSetsCount(const CPUID& cid)
 {
-    return cid.ecx + 1;
+  return cid.ecx + 1;
 }
 } // namespace
 
-CacheInfo::CacheInfo(const CPUID& c)
-: type_(GetType(c)),
+CacheInfo::CacheInfo(const CPUID& c) :
+  type_(GetType(c)),
   level_(GetLevel(c)),
   fully_associative_(GetFullyAssociative(c)),
   line_size_(GetLineSize(c)),
@@ -78,50 +78,53 @@ CacheInfo::CacheInfo(const CPUID& c)
 
 std::vector<CacheInfo> CacheInfo::GetAll()
 {
-    std::vector<CacheInfo> cache_infos;
-    for (size_t i = 0;; ++i)
+  std::vector<CacheInfo> cache_infos;
+  for (size_t i = 0;; ++i)
+  {
+    CPUID command(CPUID_CACHE_COMMAND, i);
+    CacheInfo cache_info(command);
+
+    if (cache_info.type_ == CacheType::UNDEFINED)
     {
-        CPUID command(CPUID_CACHE_COMMAND, i);
-        CacheInfo cache_info(command);
-
-        if (cache_info.type_ == CacheType::UNDEFINED)
-        {
-            break;
-        }
-
-        cache_infos.push_back(cache_info);
+      break;
     }
-    return cache_infos;
+
+    cache_infos.push_back(cache_info);
+  }
+  return cache_infos;
 }
 
 std::ostream& operator<<(std::ostream& stream, const CacheInfo& cacheInfo)
 {
-    stream << "cache type                           = " << cacheInfo.type_ << std::endl;
-    stream << "cache level                          = " << cacheInfo.level_ << std::endl;
-    stream << "fully associative cache              = " << cacheInfo.fully_associative_ << std::endl;
-    stream << "system coherency line size           = " << cacheInfo.line_size_ << std::endl;
-    stream << "ways of associativity                = " << cacheInfo.cache_associativity_ << std::endl;
-    stream << "number of sets                       = " << cacheInfo.sets_count_ << std::endl;
-    stream << "total cache size                     = " << cacheInfo.total_cache_size_ << std::endl;
-    return stream;
+  stream << "cache type                           = " << cacheInfo.type_ << std::endl;
+  stream << "cache level                          = " << cacheInfo.level_ << std::endl;
+  stream << "fully associative cache              = " << cacheInfo.fully_associative_
+         << std::endl;
+  stream << "system coherency line size           = " << cacheInfo.line_size_ << std::endl;
+  stream << "ways of associativity                = " << cacheInfo.cache_associativity_
+         << std::endl;
+  stream << "number of sets                       = " << cacheInfo.sets_count_ << std::endl;
+  stream << "total cache size                     = " << cacheInfo.total_cache_size_
+         << std::endl;
+  return stream;
 }
 
 std::ostream& operator<<(std::ostream& stream, const CacheType& cacheType)
 {
-    switch (cacheType)
-    {
-    case CacheType::UNDEFINED:
-        stream << "undefined";
-        break;
-    case CacheType::DATA:
-        stream << "data cache";
-        break;
-    case CacheType::INSTRUCTION:
-        stream << "instruction cache";
-        break;
-    case CacheType::UNIFIED:
-        stream << "unified cache";
-        break;
-    }
-    return stream;
+  switch (cacheType)
+  {
+  case CacheType::UNDEFINED:
+    stream << "undefined";
+    break;
+  case CacheType::DATA:
+    stream << "data cache";
+    break;
+  case CacheType::INSTRUCTION:
+    stream << "instruction cache";
+    break;
+  case CacheType::UNIFIED:
+    stream << "unified cache";
+    break;
+  }
+  return stream;
 }

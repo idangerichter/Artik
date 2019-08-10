@@ -3,7 +3,8 @@
 #include <chrono>
 #include <map>
 
-using time_stamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
+using time_stamp =
+  std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
 
 TEST(ListSampler, basic_functionality)
 {
@@ -20,7 +21,10 @@ TEST(ListSampler, basic_functionality)
 
   for (const auto& value : MAP)
   {
-    EXPECT_CALL(*primitive, Prepare(Ref(wrapper), value.first)).Times(1).WillOnce(Return()).RetiresOnSaturation();
+    EXPECT_CALL(*primitive, Prepare(Ref(wrapper), value.first))
+      .Times(1)
+      .WillOnce(Return())
+      .RetiresOnSaturation();
     EXPECT_CALL(*primitive, Sample(Ref(wrapper), value.first))
       .Times(1)
       .WillOnce(Return(Measurement{ value.first, value.second }))
@@ -31,9 +35,11 @@ TEST(ListSampler, basic_functionality)
   sampler.Sample(wrapper, measurements);
   // Assertions
   ASSERT_EQ(sampler.GetRequiredSize(), INDICES.size())
-    << "The required size of AverageSampler should be the length of the indices list";
+    << "The required size of AverageSampler should be the length of the "
+       "indices list";
   ASSERT_EQ(measurements.size(), INDICES.size())
-    << "The vector's size should be always the length of the indices list after sampling";
+    << "The vector's size should be always the length of the indices list "
+       "after sampling";
 
   for (const auto& measurement : measurements)
   {
@@ -75,7 +81,8 @@ TEST(ListSampler, multiple_samples)
 
     for (size_t j = 0; j < (i + 1) * ITEMS.size(); j++)
     {
-      ASSERT_TRUE(measurements[j] == (Measurement{ BASE_INDEX + j, static_cast<int32_t>(BASE_TIME + j) }));
+      ASSERT_TRUE(measurements[j] ==
+                  (Measurement{ BASE_INDEX + j, static_cast<int32_t>(BASE_TIME + j) }));
     }
   }
 }
@@ -91,10 +98,12 @@ TEST(ListSampler, sample_measure_delay)
   std::vector<Measurement> measurements;
   std::map<size_t, time_stamp> start_times;
   // Expectations
-  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _)).Times(INDICES.size()).WillRepeatedly(Invoke([&start_times](auto& mem, auto index) {
-    ASSERT_TRUE(start_times.find(index) == start_times.end());
-    start_times[index] = std::chrono::high_resolution_clock::now();
-  }));
+  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _))
+    .Times(INDICES.size())
+    .WillRepeatedly(Invoke([&start_times](auto& mem, auto index) {
+      ASSERT_TRUE(start_times.find(index) == start_times.end());
+      start_times[index] = std::chrono::high_resolution_clock::now();
+    }));
   EXPECT_CALL(*primitive, Sample(Ref(wrapper), _))
     .Times(INDICES.size())
     .WillRepeatedly(Invoke([DELAY_TIME, &start_times](auto& mem, auto index) -> Measurement {
@@ -102,8 +111,10 @@ TEST(ListSampler, sample_measure_delay)
       EXPECT_TRUE(start_times.find(index) != start_times.end())
         << "Prepare should be called before Sample";
       auto start_time = start_times.at(index);
-      auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time).count();
-      EXPECT_GE(duration, DELAY_TIME) << "Sampling each round should take more time then the delay";
+      auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time)
+                        .count();
+      EXPECT_GE(duration, DELAY_TIME)
+        << "Sampling each round should take more time then the delay";
       return Measurement{};
     }));
   // Code
@@ -122,9 +133,11 @@ TEST(ListSampler, between_items_delay)
   std::vector<Measurement> measurements;
   std::vector<time_stamp> timestamps;
   // Expectations
-  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _)).Times(INDICES.size()).WillRepeatedly(Invoke([&timestamps](auto& mem, auto index) {
-    timestamps.push_back(std::chrono::high_resolution_clock::now());
-  }));
+  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _))
+    .Times(INDICES.size())
+    .WillRepeatedly(Invoke([&timestamps](auto& mem, auto index) {
+      timestamps.push_back(std::chrono::high_resolution_clock::now());
+    }));
   EXPECT_CALL(*primitive, Sample(Ref(wrapper), _)).Times(INDICES.size()).WillRepeatedly(Return(Measurement{}));
   // Code
   ListSampler sampler(INDICES, 0, DELAY_TIME, primitive);
@@ -133,8 +146,10 @@ TEST(ListSampler, between_items_delay)
   ASSERT_EQ(timestamps.size(), INDICES.size());
   for (size_t i = 1; i < INDICES.size(); i++)
   {
-    auto duration =
-      std::chrono::duration_cast<std::chrono::nanoseconds>(timestamps[i] - timestamps[i - 1]).count();
-    ASSERT_GE(duration, DELAY_TIME) << "Time between items should be at least the given delay";
+    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                      timestamps[i] - timestamps[i - 1])
+                      .count();
+    ASSERT_GE(duration, DELAY_TIME)
+      << "Time between items should be at least the given delay";
   }
 }

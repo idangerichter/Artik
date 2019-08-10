@@ -15,71 +15,71 @@ uint64_t secret_array[LENGTH];
  */
 void print_bits(size_t const size, void const* const ptr)
 {
-    unsigned char* b = (unsigned char*)ptr;
-    unsigned char byte;
-    int i, j;
+  unsigned char* b = (unsigned char*)ptr;
+  unsigned char byte;
+  int i, j;
 
-    for (i = size - 1; i >= 0; i--)
+  for (i = size - 1; i >= 0; i--)
+  {
+    for (j = 7; j >= 0; j--)
     {
-        for (j = 7; j >= 0; j--)
-        {
-            byte = (b[i] >> j) & 1;
-            printf("%u", byte);
-        }
+      byte = (b[i] >> j) & 1;
+      printf("%u", byte);
     }
-    puts("");
+  }
+  puts("");
 }
 
 void child_process(uint64_t array[])
 {
-    std::cout << "Child process running" << std::endl;
-    while (true)
-    {
-        maccess(&array[4 * 8]);
-        maccess(&array[25 * 8]);
-    }
+  std::cout << "Child process running" << std::endl;
+  while (true)
+  {
+    maccess(&array[4 * 8]);
+    maccess(&array[25 * 8]);
+  }
 }
 
 void parent_process(uint64_t array[])
 {
-    std::cout << "Parent process running" << std::endl;
-    while (true)
+  std::cout << "Parent process running" << std::endl;
+  while (true)
+  {
+    int64_t sum = 0;
+
+    for (auto y = 0; y < INNER_ITERATIONS; y++)
     {
-        int64_t sum = 0;
-
-        for (auto y = 0; y < INNER_ITERATIONS; y++)
-        {
-            // flush the array out
-            for (auto i = 0; i < 64; i++)
-            {
-                flush(&array[i * 8]);
-            }
-            // wait
-            usleep(15 * 100);
-            // check if random element has returned
-            int r = rand() % 64;
-            sum = sum | ((int64_t)(probe_timing(&array[r * 8]) < LIMIT) << r);
-        }
-
-        print_bits(sizeof(sum), &sum);
+      // flush the array out
+      for (auto i = 0; i < 64; i++)
+      {
+        flush(&array[i * 8]);
+      }
+      // wait
+      usleep(15 * 100);
+      // check if random element has returned
+      int r = rand() % 64;
+      sum = sum | ((int64_t)(probe_timing(&array[r * 8]) < LIMIT) << r);
     }
+
+    print_bits(sizeof(sum), &sum);
+  }
 }
 
 int main(int argc, char* argv[])
 {
-    srand(static_cast<unsigned int>(time(0)));
+  srand(static_cast<unsigned int>(time(0)));
 
-    // allocate
-    auto array = new uint64_t[LENGTH];
+  // allocate
+  auto array = new uint64_t[LENGTH];
 
-    if (fork())
-    {
-        child_process(array);
-    }
-    else
-    {
-        parent_process(array);
-    }
+  if (fork())
+  {
+    child_process(array);
+  }
+  else
+  {
+    parent_process(array);
+  }
 
-    return 0;
+  return 0;
 }

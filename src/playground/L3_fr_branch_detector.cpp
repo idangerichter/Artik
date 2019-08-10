@@ -16,8 +16,8 @@ AttackManager GetAttack(const std::string& path, size_t first_index, size_t seco
 {
   auto indices = { first_index, second_index };
   auto primitive = std::make_unique<FlushSamplerPrimitive>();
-  auto sampler = std::make_unique<ListSampler>(indices, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY,
-                                               std::move(primitive));
+  auto sampler = std::make_unique<ListSampler>(
+    indices, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY, std::move(primitive));
   auto average_sampler =
     std::make_unique<AverageSampler>(std::move(sampler), SAMPLE_ROUNDS, BETWEEN_ROUNDS_DELAY);
 
@@ -61,14 +61,14 @@ int main(int argc, char* argv[])
     {
       if (result.index == addr0 && result.score >= MIN_SCORE)
       {
-        std::cout << "Case 0 triggered with score: " << result.score << " Total: 0s: " << total0
-                  << " 1s: " << total1 << std::endl;
+        std::cout << "Case 0 triggered with score: " << result.score
+                  << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
         total0++;
       }
       else if (result.index == addr1 && result.score >= MIN_SCORE)
       {
-        std::cout << "Case 1 triggered with score: " << result.score << " Total: 0s: " << total0
-                  << " 1s: " << total1 << std::endl;
+        std::cout << "Case 1 triggered with score: " << result.score
+                  << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
         total1++;
       }
     }

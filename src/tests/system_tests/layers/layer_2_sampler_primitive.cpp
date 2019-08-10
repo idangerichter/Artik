@@ -1,6 +1,8 @@
 #include "layer_2_sampler_primitive.hpp"
 
-LayerSamplerPrimitive::LayerSamplerPrimitive(size_t first_index, size_t second_index, MemoryWrapper&& memory_wrapper) :
+LayerSamplerPrimitive::LayerSamplerPrimitive(size_t first_index,
+                                             size_t second_index,
+                                             MemoryWrapper&& memory_wrapper) :
   Layer(first_index, second_index, 2, "Sampler primitive"),
   memory_wrapper_(std::move(memory_wrapper)),
   temp_results_(2),
@@ -11,7 +13,7 @@ LayerSamplerPrimitive::LayerSamplerPrimitive(size_t first_index, size_t second_i
 }
 std::vector<Measurement>& LayerSamplerPrimitive::Sample()
 {
- primitive_.Prepare(memory_wrapper_, first_index_);
+  primitive_.Prepare(memory_wrapper_, first_index_);
   Sleep(DELAY);
   auto result1 = primitive_.Sample(memory_wrapper_, first_index_).time;
 

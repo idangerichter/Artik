@@ -4,7 +4,8 @@
 #include "../../testutils/testutils_sample_primitives.inl"
 #include <chrono>
 
-using time_stamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
+using time_stamp =
+  std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds>;
 
 TEST(AverageSampler, basic_functionality)
 {
@@ -13,7 +14,8 @@ TEST(AverageSampler, basic_functionality)
   const auto BASE_TIME = 200;
   const auto TIME_DELTA = 3;
   const auto NUM_ITERATIONS_FOR_AVERAGE = 50;
-  const auto AVERAGE = (2 * BASE_TIME + (NUM_ITERATIONS_FOR_AVERAGE - 1) * TIME_DELTA) / 2;
+  const auto AVERAGE =
+    (2 * BASE_TIME + (NUM_ITERATIONS_FOR_AVERAGE - 1) * TIME_DELTA) / 2;
   // Dependencies
   auto primitive = testutils::Primitive();
   auto mock_index = 0;
@@ -40,9 +42,11 @@ TEST(AverageSampler, basic_functionality)
   // Assertions
   ASSERT_EQ(sampler.GetRequiredSize(), 1)
     << "AverageSampler should require the same size as the Sampler it wraps";
-  ASSERT_EQ(measurements.size(), 1) << "After measuring, the size of measurements must be one";
+  ASSERT_EQ(measurements.size(), 1)
+    << "After measuring, the size of measurements must be one";
   ASSERT_EQ(measurements[0].index, INPUT_INDEX);
-  ASSERT_EQ(measurements[0].time, AVERAGE) << "Measurement's time must be averages of measurements";
+  ASSERT_EQ(measurements[0].time, AVERAGE)
+    << "Measurement's time must be averages of measurements";
 }
 TEST(AverageSampler, multiple_samples)
 {
@@ -116,8 +120,12 @@ TEST(AverageSampler, between_rounds_delay)
   sampler.Sample(wrapper, measurements);
   // Assertions
   ASSERT_EQ(timestamps.size(), NUM_ITERATIONS_FOR_AVERAGE);
-  for (auto i = 1; i < NUM_ITERATIONS_FOR_AVERAGE; i++) {
-    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(timestamps[i] - timestamps[i-1]).count();
-    ASSERT_GE(duration, DELAY_TIME) << "Time between measures should be at least the given delay";
+  for (auto i = 1; i < NUM_ITERATIONS_FOR_AVERAGE; i++)
+  {
+    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(
+                      timestamps[i] - timestamps[i - 1])
+                      .count();
+    ASSERT_GE(duration, DELAY_TIME)
+      << "Time between measures should be at least the given delay";
   }
 }

@@ -21,8 +21,10 @@ std::unique_ptr<ScoreProvider> Calibrate(std::vector<Measurement>& measurements_
   auto index = static_cast<size_t>(measurements_after_flush.size() * THRESHOLD_FLUSHED_MULTIPLIER);
 
   auto typeCoerced = type == AttackType ::FlushReload;
-  std::nth_element(measurements_after_flush.begin(), measurements_after_flush.begin() + index,
-                   measurements_after_flush.end(), [typeCoerced](Measurement& lhs, Measurement& rhs) -> bool {
+  std::nth_element(measurements_after_flush.begin(),
+                   measurements_after_flush.begin() + index,
+                   measurements_after_flush.end(),
+                   [typeCoerced](Measurement& lhs, Measurement& rhs) -> bool {
                      return (lhs.time < rhs.time) ^ typeCoerced;
                    });
 

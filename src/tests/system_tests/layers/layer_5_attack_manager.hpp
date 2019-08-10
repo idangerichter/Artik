@@ -14,5 +14,4 @@ private:
   std::vector<Measurement> temp_results_;
   std::vector<AttackResult> temp_attack_results_;
   AttackManager attack_manager_;
-
 };

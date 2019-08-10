@@ -1,7 +1,9 @@
 #include "layer_0_cache_intrinsics.hpp"
 #include "../../../lib/low_level/cache_intrinsics.hpp"
 
-LayerCacheIntrinsics::LayerCacheIntrinsics(size_t first_index, size_t second_index, MemoryWrapper&& memory_wrapper) :
+LayerCacheIntrinsics::LayerCacheIntrinsics(size_t first_index,
+                                           size_t second_index,
+                                           MemoryWrapper&& memory_wrapper) :
   Layer(first_index, second_index, 0, "Cache intrinsics"),
   memory_wrapper_(std::move(memory_wrapper)),
   temp_results_(2)

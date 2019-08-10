@@ -1,7 +1,8 @@
 #pragma once
 #include "../sampling/measurement.hpp"
 
-class ScoreProvider {
+class ScoreProvider
+{
 public:
-    virtual double Normalize(Measurement measurement) const = 0;
+  virtual double Normalize(Measurement measurement) const = 0;
 };

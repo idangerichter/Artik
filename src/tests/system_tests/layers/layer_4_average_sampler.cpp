@@ -2,7 +2,9 @@
 #include "../../../lib/sampling/sampler_primitives.hpp"
 #include "../../../lib/sampling/samplers/list_sampler.hpp"
 
-LayerAverageSampler::LayerAverageSampler(size_t first_index, size_t second_index, MemoryWrapper&& memory_wrapper) :
+LayerAverageSampler::LayerAverageSampler(size_t first_index,
+                                         size_t second_index,
+                                         MemoryWrapper&& memory_wrapper) :
   Layer(first_index, second_index, 4, "Average sampler"),
   memory_wrapper_(std::move(memory_wrapper)),
   temp_results_(),

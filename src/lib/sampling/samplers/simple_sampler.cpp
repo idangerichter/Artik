@@ -1,8 +1,12 @@
 #include "simple_sampler.hpp"
 #include <thread>
 
-SimpleSampler::SimpleSampler(size_t index, size_t delay, std::shared_ptr<SamplerPrimitive> sampler_primitive)
-: index_(index), delay_(delay), sampler_primitive_(sampler_primitive)
+SimpleSampler::SimpleSampler(size_t index,
+                             size_t delay,
+                             std::shared_ptr<SamplerPrimitive> sampler_primitive) :
+  index_(index),
+  delay_(delay),
+  sampler_primitive_(sampler_primitive)
 {
 }
 
