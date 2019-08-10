@@ -109,7 +109,7 @@ TEST(ListSampler, sample_measure_delay)
     .WillRepeatedly(Invoke([DELAY_TIME, &start_times](auto& mem, auto index) -> Measurement {
       auto end_time = std::chrono::high_resolution_clock::now();
       EXPECT_TRUE(start_times.find(index) != start_times.end())
-            << "Prepare should be called before Sample";
+        << "Prepare should be called before Sample";
       auto start_time = start_times.at(index);
       auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time)
                         .count();
@@ -187,7 +187,8 @@ TEST(ListSampler, multiple_samples_parallel)
 
     for (size_t j = 0; j < (i + 1) * ITEMS.size(); j++)
     {
-      ASSERT_TRUE(measurements[j] == (Measurement{ BASE_INDEX + j, static_cast<int32_t>(BASE_TIME + j) }));
+      ASSERT_TRUE(measurements[j] ==
+                  (Measurement{ BASE_INDEX + j, static_cast<int32_t>(BASE_TIME + j) }));
     }
   }
 }
