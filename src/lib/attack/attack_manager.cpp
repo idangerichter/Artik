@@ -1,5 +1,7 @@
 #include "attack_manager.hpp"
+#include "../calibration/calibration.hpp"
 #include <stdexcept>
+#include <thread>
 #include <utility>
 
 
@@ -19,11 +21,28 @@ AttackManager::AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_t
 {
 }
 
-void AttackManager::Calibrate()
+void AttackManager::Calibrate( size_t flushed_sample_rounds,
+                              size_t action_sample_delay,
+                              size_t between_samples_delay)
 {
-  // FIXME measure few times and pass to calibrate to process it
-  // currently calibrate is no-op so this method is also no-op
   std::vector<Measurement> measurements;
+  measurements.reserve(flushed_sample_rounds);
+
+  for (size_t i = 0; i < flushed_sample_rounds; i++)
+  {
+    memory_wrapper_.Flush(0);
+    if (action_sample_delay != 0)
+    {
+      std::this_thread::sleep_for(std::chrono::nanoseconds(action_sample_delay));
+    }
+    measurements.push_back(Measurement{ 0, memory_wrapper_.Measure(0) });
+
+    if (between_samples_delay != 0)
+    {
+      std::this_thread::sleep_for(std::chrono::nanoseconds(between_samples_delay));
+    }
+  }
+
   score_provider_ = Calibration::Calibrate(measurements, attack_type_);
 }
 void AttackManager::Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results)

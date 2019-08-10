@@ -33,7 +33,7 @@ public:
   AttackManager& operator=(const AttackManager& attack) = delete;
 
   // Generate score_provider_ using memory_wrapper_ and sampler_
-  void Calibrate();
+  void Calibrate(size_t flushed_sample_rounds = 500, size_t action_sample_delay = 0, size_t between_samples_delay = 0);
 
   // Perform a cache attack and append the results
   void Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results);

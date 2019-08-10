@@ -1,5 +1,5 @@
-#include "../../lib/sampling/samplers/simple_sampler.hpp"
-#include "../testutils/testutils_sample_primitives.inl"
+#include "../../../lib/sampling/samplers/simple_sampler.hpp"
+#include "../../testutils/testutils_sample_primitives.inl"
 #include <chrono>
 
 TEST(SimpleSampler, basic_functionality)

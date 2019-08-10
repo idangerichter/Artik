@@ -2,9 +2,6 @@
 #include "../lib/sampling/sampler_primitives.hpp"
 #include "../lib/sampling/samplers/average_sampler.hpp"
 #include "../lib/sampling/samplers/list_sampler.hpp"
-#include "../lib/utils/memory_wrapper.hpp"
-#include "../main/utils/cacheutils.h"
-#include "../main/utils/intel.h"
 #include <iostream>
 
 
@@ -30,8 +27,6 @@ AttackManager GetAttack(const std::string& path, size_t first_index, size_t seco
   return attack;
 }
 
-#define LIMIT 220
-
 
 int main(int argc, char* argv[])
 {
@@ -42,8 +37,8 @@ int main(int argc, char* argv[])
   }
 
   char* path = argv[1];
-  int addr0 = std::strtol(argv[2], nullptr, 16);
-  int addr1 = std::strtol(argv[3], nullptr, 16);
+  size_t addr0 = std::strtol(argv[2], nullptr, 16);
+  size_t addr1 = std::strtol(argv[3], nullptr, 16);
 
   if (addr0 <= 0 || addr1 <= 0)
   {

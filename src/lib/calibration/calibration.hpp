@@ -13,5 +13,5 @@ enum class AttackType
 // and outputing a corresponding ScoreProvider
 namespace Calibration
 {
-std::unique_ptr<ScoreProvider> Calibrate(const std::vector<Measurement>& measurements, AttackType type);
+std::unique_ptr<ScoreProvider> Calibrate(std::vector<Measurement>& measurements_after_flush, AttackType type);
 };
