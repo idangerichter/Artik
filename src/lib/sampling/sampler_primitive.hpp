@@ -11,14 +11,16 @@
 class SamplerPrimitive
 {
 public:
-    // Prepare to perform the sampling on the given index.
-    // @param memory The memory to execute the sampling on
-    // @param index the index of the sampled cell
-    virtual void Prepare(MemoryWrapper& memory, size_t index) const;
+  // Prepare to perform the sampling on the given index.
+  // @param memory The memory to execute the sampling on
+  // @param index the index of the sampled cell
+  virtual void Prepare(const MemoryWrapper& memory, size_t index) const;
 
-    // Sample the access time and return the result.
-    // Default implementation would be to call `memory.Measure(index)`.
-    // @param memory The memory to execute the sampling on
-    // @param index the index of the sampled cell
-    virtual Measurement Sample(MemoryWrapper& memory, size_t index) const;
+  // Sample the access time and return the result.
+  // Default implementation would be to call `memory.Measure(index)`.
+  // @param memory The memory to execute the sampling on
+  // @param index the index of the sampled cell
+  virtual Measurement Sample(const MemoryWrapper& memory, size_t index) const;
+
+  virtual ~SamplerPrimitive() = default;
 };

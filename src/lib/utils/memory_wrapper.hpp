@@ -35,7 +35,7 @@ public:
     const Byte& operator[](size_t index) const;
     MemoryWrapper& operator= (const MemoryWrapper& mem_wrapper) = delete;
 
-    // Measure the amount of clock cycles it takes to get the value at index 
+  // Measure the amount of clock cycles it takes to get the value at index
     int32_t Measure(size_t index) const;
     
     // Flush the given index.

@@ -2,7 +2,7 @@
 #include "../sampler.hpp"
 #include "../sampler_primitive.hpp"
 
-// ListSampler samples in a given indices set
+// ListSampler samples in a given indices set, in the given order.
 class ListSampler : public Sampler
 {
 public:

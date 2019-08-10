@@ -1,21 +1,17 @@
 #include "memory_wrapper.hpp"
 #include "../low_level/cache_intrinsics.hpp"
-#include <fcntl.h>
 #include <stdexcept>
 #include <sys/mman.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
 
-MemoryWrapper::MemoryWrapper(size_t size): 
-    memory_type_(MemoryType::ALLOCATED), 
+MemoryWrapper::MemoryWrapper(size_t size):
+    memory_type_(MemoryType::ALLOCATED),
     size_(size),
-    array_(new Byte[size])
+    array_(new Byte[size], [](auto array){delete[] array;} )
 {
 }
 
 MemoryWrapper::MemoryWrapper(void* array, size_t size):
-    memory_type_(MemoryType::PRE_ALLOCATED), 
+    memory_type_(MemoryType::PRE_ALLOCATED),
     size_(size),
     array_(reinterpret_cast<Byte*>(array), [](auto array){})
 {
