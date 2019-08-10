@@ -1,0 +1,3 @@
+[submodule "hostapd-atrik"]
+	path = hostapd-atrik
+	url = https://github.com/yoavst/hostapd-atrik.git
