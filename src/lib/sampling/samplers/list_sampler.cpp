@@ -1,7 +1,7 @@
 #include "list_sampler.hpp"
 #include <thread>
 #include <utility>
- 
+
 ListSampler::ListSampler(std::vector<size_t> indices,
                          size_t sample_measure_delay,
                          size_t between_items_delay,
@@ -47,7 +47,7 @@ void ListSampler::ParallelSample(MemoryWrapper& memory, std::vector<Measurement>
     std::this_thread::sleep_for(std::chrono::nanoseconds(sample_measure_delay_));
   }
 
-  for (auto const& index : indices_)
+  for (auto index : indices_)
   {
     measurements_vector.push_back(sampler_primitive_->Sample(memory, index));
   }
