@@ -109,7 +109,7 @@ TEST(ListSampler, sample_measure_delay)
     .WillRepeatedly(Invoke([DELAY_TIME, &start_times](auto& mem, auto index) -> Measurement {
       auto end_time = std::chrono::high_resolution_clock::now();
       EXPECT_TRUE(start_times.find(index) != start_times.end())
-        << "Prepare should be called before Sample";
+            << "Prepare should be called before Sample";
       auto start_time = start_times.at(index);
       auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end_time - start_time)
                         .count();
@@ -151,5 +151,43 @@ TEST(ListSampler, between_items_delay)
                       .count();
     ASSERT_GE(duration, DELAY_TIME)
       << "Time between items should be at least the given delay";
+  }
+}
+
+TEST(ListSampler, multiple_samples_parallel)
+{
+  // Consts
+  const int NUM_ITERATIONS = 35;
+  const std::vector<size_t> ITEMS = { 1, 2, 3 };
+  const auto BASE_TIME = 300;
+  const size_t BASE_INDEX = 20;
+  // Dependencies
+  auto primitive = testutils::Primitive();
+  MemoryWrapper wrapper(0);
+  std::vector<Measurement> measurements;
+  int mock_index = 0;
+  // Expectations
+  EXPECT_CALL(*primitive, Prepare(Ref(wrapper), _))
+    .Times(static_cast<int>(NUM_ITERATIONS * ITEMS.size()))
+    .WillRepeatedly(Return());
+  EXPECT_CALL(*primitive, Sample(Ref(wrapper), _))
+    .Times(static_cast<int>(NUM_ITERATIONS * ITEMS.size()))
+    .WillRepeatedly(Invoke([&mock_index](auto& wrapper, auto index) mutable -> Measurement {
+      auto res = Measurement{ BASE_INDEX + mock_index, BASE_TIME + mock_index };
+      mock_index++;
+      return res;
+    }));
+
+  // Code
+  ListSampler sampler(ITEMS, 0, 0, primitive, ListSamplerMode::Parallel);
+  for (auto i = 0; i < NUM_ITERATIONS; i++)
+  {
+    sampler.Sample(wrapper, measurements);
+    ASSERT_EQ(measurements.size(), (i + 1) * ITEMS.size());
+
+    for (size_t j = 0; j < (i + 1) * ITEMS.size(); j++)
+    {
+      ASSERT_TRUE(measurements[j] == (Measurement{ BASE_INDEX + j, static_cast<int32_t>(BASE_TIME + j) }));
+    }
   }
 }
