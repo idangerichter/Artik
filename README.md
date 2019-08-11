@@ -98,4 +98,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate. Also, we use [Gitmoji](https://gitmoji.carloscuesta.me/) in commit messages.
 
 ## License
-[MIT](https://choosealicense.com/licenses/wtfpl/)
+
+[WTFPL](https://choosealicense.com/licenses/wtfpl/)
