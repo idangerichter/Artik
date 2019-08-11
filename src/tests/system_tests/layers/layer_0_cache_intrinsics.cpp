@@ -20,7 +20,7 @@ std::vector<Measurement>& LayerCacheIntrinsics::Sample()
 
   Sleep(DELAY);
 
-  void* ptr2 = &memory_wrapper_[first_index_];
+  void* ptr2 = &memory_wrapper_[second_index_];
   Memory::MemoryFlush(ptr2);
   Sleep(DELAY);
   auto result2 = Memory::ProbeTiming(ptr2);
