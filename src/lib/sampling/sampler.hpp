@@ -3,8 +3,15 @@
 #include "measurement.hpp"
 #include <vector>
 
-// Sampler is using the SamplerPrimitive in a given pattern.
-// It gets the measurements by repeatedly calling the SamplerPrimitive on selected indices.
+/////////////////////////////////// Sampler ///////////////////////////////////
+//  Performs the logic of sampling in a given pattern using Sampler Primitive.
+//
+//  For performance and to avoid copying that can affect the cache and destroy 
+//  measurements, the output is given via measurements_vector and not returned.
+//  It is encouraged when using the sampler more than once, to clear 
+//  measurements_vector and reuse it. This way avoids often reallocating, 
+//  that may affect the credability of the measuremnts.
+///////////////////////////////////////////////////////////////////////////////
 class Sampler
 {
 public:

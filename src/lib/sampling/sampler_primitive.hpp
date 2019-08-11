@@ -4,10 +4,14 @@
 #include "measurement.hpp"
 #include <cstddef>
 
-
-// Responsible for accurately measuring the time to access memory while handling preparations and so on.
-// For example:
-//      Flush+Reload - The FlushReloadSampler flushes the given index in Prepare and access in Sample.
+////////////////////////////// Sampler Primitive //////////////////////////////
+//  Responsible for accurately measuring the time to access memory while
+//  handling preparations and so on.
+//
+//  For example:
+//    Flush+Reload - The FlushReloadSampler flushes the given index in Prepare
+//                   and access in Sample.
+///////////////////////////////////////////////////////////////////////////////
 class SamplerPrimitive
 {
 public:

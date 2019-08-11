@@ -10,9 +10,15 @@ enum class MemoryType
   PRE_ALLOCATED
 };
 
-
+//////////////////////////////// Memory Wrapper ////////////////////////////////
 //  A generic wrapper for a memory object that can measure time,
 //  flush memory, evict so on and so forth.
+//
+//  The source of the memory can be loaded from a file, allocated by
+//  the memory wrapper or given pre allocated.
+//  Memory wrapper will free the resources it uses (e.g. file, allocation)
+//  unless it was given pre allocated.
+///////////////////////////////////////////////////////////////////////////////
 class MemoryWrapper
 {
 public:
@@ -28,6 +34,7 @@ public:
   // Create a memory wrapper from already allocated array.
   // Note: The array will not be freed!!
   explicit MemoryWrapper(void* array, size_t size);
+
   MemoryWrapper(MemoryWrapper&& mem_wrapper);
 
   Byte& operator[](size_t index);

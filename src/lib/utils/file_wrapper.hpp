@@ -1,7 +1,11 @@
 #pragma once
 #include "../includes.hpp"
 
-// Wrapper for file
+///////////////////////////////// File Wrapper /////////////////////////////////
+//  A wrapper for a file object in linux.
+// 
+//  Gives interface to loading to memory and unloading from it.
+///////////////////////////////////////////////////////////////////////////////
 class FileWrapper
 {
 public:

@@ -1,7 +1,6 @@
 #include "calibration.hpp"
 #include "score_provider.hpp"
 
-// <3 Shmuel Safra
 class GapScoreProvider : public ScoreProvider
 {
 public:

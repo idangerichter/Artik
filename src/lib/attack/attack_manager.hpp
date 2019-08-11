@@ -1,10 +1,8 @@
 #pragma once
-
 #include "../calibration/calibration.hpp"
 #include "../calibration/score_provider.hpp"
 #include "../sampling/sampler.hpp"
 #include <memory>
-
 
 struct AttackResult
 {
@@ -12,12 +10,15 @@ struct AttackResult
   double score;
 };
 
-// This class is managing the attack
-// It is in charge of giving calibration method
-// and performing a cache attack, saving the results to attack_results_
+//////////////////////////////// Attack Manager ///////////////////////////////
+//  This class is managing the attack.
+//  It is in charge of giving calibration method
+//  and performing a cache attack, saving the results to attack_results_.
 //
-// AttackManager has two modes, he either calibrate and generate
-// ScoreProvider on his own, or he gets it from a outside source
+//  AttackManager has two modes, he either calibrate and generate
+//  ScoreProvider on his own, or he gets it from an outside source.
+///////////////////////////////////////////////////////////////////////////////
+
 class AttackManager
 {
 public:

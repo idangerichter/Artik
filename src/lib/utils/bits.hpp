@@ -1,7 +1,6 @@
 #pragma once
 #include <cassert>
 
-
 //  Create bitmask for {from, from+1, ..., to}
 //  if from = to, it will mask {from}
 static constexpr uint64_t Bitmask(const unsigned int from, const unsigned int to)

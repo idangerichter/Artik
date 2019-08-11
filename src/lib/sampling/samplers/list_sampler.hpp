@@ -8,8 +8,14 @@ enum class ListSamplerMode
   Parallel
 };
 
-
-// ListSampler samples in a given indices set, in the given order.
+///////////////////////////////// List Sampler ////////////////////////////////
+//  ListSampler samples in a given indices set, in the given order.
+//
+//  It has two modes, Sequential and Parallel. 
+//  - In sequential sampling, indices are prepared and measured one by one
+//  - In parallel sampling, indicies are first prepared all at once and
+//    then measured all at once.
+///////////////////////////////////////////////////////////////////////////////
 class ListSampler : public Sampler
 {
 public:
