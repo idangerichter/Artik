@@ -61,15 +61,15 @@ int main(int argc, char* argv[])
     {
       if (result.index == addr0 && result.score >= MIN_SCORE)
       {
+        total0++;
         std::cout << "Case 0 triggered with score: " << result.score
                   << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
-        total0++;
       }
       else if (result.index == addr1 && result.score >= MIN_SCORE)
       {
+        total1++;
         std::cout << "Case 1 triggered with score: " << result.score
                   << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
-        total1++;
       }
     }
   }
