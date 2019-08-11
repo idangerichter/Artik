@@ -31,7 +31,9 @@ def start_tester(path: str, args: List[str]) -> subprocess.Popen:
 
 
 def get_data_from_tester(p: subprocess.Popen) -> List[Tuple[int, int]]:
-    output, _ = p.communicate(timeout=TIMEOUT)
+    output, err = p.communicate(timeout=TIMEOUT)
+    if err:
+        print(f'error: {err}')
     # noinspection PyTypeChecker
     return [tuple(map(int, line.split(' '))) for line in output.decode('utf-8').splitlines()]
 
