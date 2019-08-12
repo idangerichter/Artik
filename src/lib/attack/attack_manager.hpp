@@ -1,10 +1,8 @@
 #pragma once
-
 #include "../calibration/calibration.hpp"
 #include "../calibration/score_provider.hpp"
 #include "../sampling/sampler.hpp"
 #include <memory>
-
 
 struct AttackResult
 {
@@ -12,12 +10,15 @@ struct AttackResult
   double score;
 };
 
-// This class is managing the attack
-// It is in charge of giving calibration method
-// and performing a cache attack, saving the results to attack_results_
+//////////////////////////////// Attack Manager ///////////////////////////////
+//  This class is managing the attack.
+//  It is in charge of giving calibration method
+//  and performing a cache attack, saving the results to attack_results_.
 //
-// AttackManager has two modes, he either calibrate and generate
-// ScoreProvider on his own, or he gets it from a outside source
+//  AttackManager has two modes, he either calibrate and generate
+//  ScoreProvider on his own, or he gets it from an outside source.
+///////////////////////////////////////////////////////////////////////////////
+
 class AttackManager
 {
 public:
@@ -26,14 +27,18 @@ public:
                 std::unique_ptr<Sampler> sampler,
                 std::shared_ptr<ScoreProvider> score_provider);
 
-  AttackManager(MemoryWrapper&& memory_wrapper, AttackType attack_type, std::unique_ptr<Sampler> sampler);
+  AttackManager(MemoryWrapper&& memory_wrapper,
+                AttackType attack_type,
+                std::unique_ptr<Sampler> sampler);
 
   AttackManager(const AttackManager& attack) = delete;
   AttackManager(AttackManager&& attack) = default;
   AttackManager& operator=(const AttackManager& attack) = delete;
 
   // Generate score_provider_ using memory_wrapper_ and sampler_
-  void Calibrate();
+  void Calibrate(size_t flushed_sample_rounds = 500,
+                 size_t action_sample_delay = 0,
+                 size_t between_samples_delay = 0);
 
   // Perform a cache attack and append the results
   void Attack(std::vector<Measurement>& measurements, std::vector<AttackResult>& results);

@@ -2,9 +2,6 @@
 #include "../lib/sampling/sampler_primitives.hpp"
 #include "../lib/sampling/samplers/average_sampler.hpp"
 #include "../lib/sampling/samplers/list_sampler.hpp"
-#include "../lib/utils/memory_wrapper.hpp"
-#include "../main/utils/cacheutils.h"
-#include "../main/utils/intel.h"
 #include <iostream>
 
 
@@ -19,8 +16,8 @@ AttackManager GetAttack(const std::string& path, size_t first_index, size_t seco
 {
   auto indices = { first_index, second_index };
   auto primitive = std::make_unique<FlushSamplerPrimitive>();
-  auto sampler = std::make_unique<ListSampler>(indices, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY,
-                                               std::move(primitive));
+  auto sampler = std::make_unique<ListSampler>(
+    indices, SAMPLE_MEASURE_DELAY, BETWEEN_ITEMS_DELAY, std::move(primitive));
   auto average_sampler =
     std::make_unique<AverageSampler>(std::move(sampler), SAMPLE_ROUNDS, BETWEEN_ROUNDS_DELAY);
 
@@ -29,8 +26,6 @@ AttackManager GetAttack(const std::string& path, size_t first_index, size_t seco
   attack.Calibrate();
   return attack;
 }
-
-#define LIMIT 220
 
 
 int main(int argc, char* argv[])
@@ -42,8 +37,8 @@ int main(int argc, char* argv[])
   }
 
   char* path = argv[1];
-  int addr0 = std::strtol(argv[2], nullptr, 16);
-  int addr1 = std::strtol(argv[3], nullptr, 16);
+  size_t addr0 = std::strtol(argv[2], nullptr, 16);
+  size_t addr1 = std::strtol(argv[3], nullptr, 16);
 
   if (addr0 <= 0 || addr1 <= 0)
   {
@@ -66,15 +61,15 @@ int main(int argc, char* argv[])
     {
       if (result.index == addr0 && result.score >= MIN_SCORE)
       {
-        std::cout << "Case 0 triggered with score: " << result.score << " Total: 0s: " << total0
-                  << " 1s: " << total1 << std::endl;
         total0++;
+        std::cout << "Case 0 triggered with score: " << result.score
+                  << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
       }
       else if (result.index == addr1 && result.score >= MIN_SCORE)
       {
-        std::cout << "Case 1 triggered with score: " << result.score << " Total: 0s: " << total0
-                  << " 1s: " << total1 << std::endl;
         total1++;
+        std::cout << "Case 1 triggered with score: " << result.score
+                  << " Total: 0s: " << total0 << " 1s: " << total1 << std::endl;
       }
     }
   }

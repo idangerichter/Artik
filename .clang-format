@@ -1,7 +1,7 @@
 AccessModifierOffset: -2
 AlignEscapedNewlinesLeft: true
 AlignTrailingComments: false
-AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortFunctionsOnASingleLine: false
 AllowShortIfStatementsOnASingleLine: true
 AllowShortBlocksOnASingleLine: false
@@ -9,11 +9,12 @@ AllowShortLoopsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: false
 BinPackParameters: false
+BinPackArguments: false
 BreakBeforeBinaryOperators: false
 BreakBeforeBraces: Allman
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: AfterColon
-ColumnLimit: 100
+ColumnLimit: 80
 CommentPragmas: ''
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 2
@@ -28,10 +29,10 @@ MaxEmptyLinesToKeep: 2
 NamespaceIndentation: None
 ObjCSpaceAfterProperty: true
 ObjCSpaceBeforeProtocolList: true
-PenaltyBreakBeforeFirstCallParameter: 100
-PenaltyBreakComment: 100
+PenaltyBreakBeforeFirstCallParameter: 80
+PenaltyBreakComment: 80
 PenaltyBreakFirstLessLess: 0
-PenaltyBreakString: 100
+PenaltyBreakString: 80
 PenaltyExcessCharacter: 1
 PenaltyReturnTypeOnItsOwnLine: 20
 SpaceBeforeAssignmentOperators: true

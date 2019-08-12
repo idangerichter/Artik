@@ -1,15 +1,23 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
+
+# see https://public.kitware.com/pipermail/cmake/2009-November/033133.html
+if (EXISTS /usr/local/bin/g++-8.3.0)
+    set(CMAKE_CXX_COMPILER /usr/local/bin/g++-8.3.0)
+    set(CMAKE_C_COMPILER /usr/local/bin/gcc-8.3.0)
+else ()
+    set(CMAKE_CXX_COMPILER /usr/bin/g++)
+    set(CMAKE_C_COMPILER /usr/bin/gcc)
+endif ()
+
 project(CryptoWorkshop CXX)
 
 # Cmake settings
-set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # C++ settings
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_COMPILER /usr/bin/g++)
-set(CMAKE_C_COMPILER /usr/bin/gcc)
 
 # static linking - for computer lab compatability
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")

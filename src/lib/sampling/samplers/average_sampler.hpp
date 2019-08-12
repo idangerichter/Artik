@@ -1,7 +1,12 @@
 #pragma once
 #include "../sampler.hpp"
 #include <thread>
-
+/////////////////////////////// Average Sampler ///////////////////////////////
+//  AverageSampler, uses any sampler and average out it results for a 
+//  specified amount of rounds.
+//  It does so in a way which is friendly for cache measurements by clearing,
+//  measurements_vector of sampler_ after every round.
+///////////////////////////////////////////////////////////////////////////////
 class AverageSampler : public Sampler
 {
 public:
@@ -19,5 +24,4 @@ private:
   // Due to performance issues, we allocate the vector once.
   std::vector<Measurement> temp_measurements_;
   std::vector<Measurement> temp_aggregating_measurements_;
-
 };

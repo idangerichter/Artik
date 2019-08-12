@@ -38,7 +38,8 @@ FileWrapper::FileWrapper(FileWrapper&& file) : fd_(file.fd_), size_(file.size_)
 
 Byte* FileWrapper::LoadToMemory(size_t offset, size_t size) const
 {
-  Byte* memory = reinterpret_cast<Byte*>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd_, offset));
+  Byte* memory =
+    reinterpret_cast<Byte*>(mmap(nullptr, size, PROT_READ, MAP_SHARED, fd_, offset));
   if (memory == reinterpret_cast<Byte*>(-1))
   {
     throw std::runtime_error("Failed to allocated the required memory size");
