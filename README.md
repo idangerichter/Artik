@@ -1,5 +1,6 @@
 # Artik
-Artik is a library for cache side channel attack. It was built as part of a workshop for cryptographic attacks in Tel Aviv University.  
+Artik is a library for cache side channel attack. It was built as part of a workshop for cryptographic attacks in Tel Aviv University. 
+This library was inspired by the [Mastik](https://github.com/Sanghyun-Hong/Mastik) library. 
 ## Requirements
 - Linux enviorment x86 intel processor.
 - CMake 3.5 or higher.
